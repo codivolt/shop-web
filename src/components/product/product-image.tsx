@@ -1,0 +1,54 @@
+import Image from "next/image";
+
+import { normalizeImage } from "@/lib/format";
+import { cn } from "@/lib/cn";
+
+export function ProductImage({
+  src,
+  alt,
+  sizes,
+  priority,
+  className,
+}: {
+  src: string | null | undefined;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+  className?: string;
+}) {
+  const normalized = normalizeImage(src);
+
+  if (!normalized) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-stone-100 via-white to-brand-50 text-stone-300">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <circle cx="9" cy="10" r="1.5" fill="currentColor" />
+          <path
+            d="m4.8 16.5 4.3-3.9a1.4 1.4 0 0 1 1.9 0l2.1 1.9 2.2-2a1.4 1.4 0 0 1 1.9 0l3 2.7"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+        <span className="text-[11px] font-medium text-stone-400">بدون تصویر</span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={normalized}
+      alt={alt}
+      fill
+      sizes={sizes}
+      priority={priority}
+      unoptimized={normalized.startsWith("data:") || normalized.startsWith("blob:")}
+      className={cn("object-cover", className)}
+    />
+  );
+}

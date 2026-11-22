@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+
+  --color-brand-50: #fff9ed;
+  --color-brand-100: #fef0d5;
+  --color-brand-200: #fcdc9e;
+  --color-brand-300: #f9c266;
+  --color-brand-400: #f6a33b;
+  --color-brand-500: #f08519;
+  --color-brand-600: #d96a0e;
+  --color-brand-700: #b45309;
+  --color-brand-800: #91400e;
+  --color-brand-900: #76360f;
+  --color-brand-950: #421b05;
+
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-stone-50);
+    color: var(--color-stone-800);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-200);
+    color: var(--color-brand-950);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-stone-300) transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-stone-300);
+    border-radius: 3px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-stone-400);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .container-page {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 80rem;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  .card-surface {
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in oklab, var(--color-stone-200) 80%, transparent);
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgb(28 25 23 / 0.04);
+  }
+
+  .hero-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.94);
+    filter: blur(8px);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes modal-sheet-in {
+  0% {
+    opacity: 0.4;
+    transform: translateY(100%);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-pop-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+    filter: blur(4px);
+  }
+}
+
+@keyframes modal-sheet-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes modal-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer components {
+  .modal-backdrop-in {
+    animation: modal-fade-in 0.3s ease-out both;
+  }
+
+  .modal-backdrop-out {
+    animation: modal-fade-out 0.28s ease-in both;
+  }
+
+  @keyframes modal-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .modal-panel-in {
+    animation: modal-pop-in 0.46s cubic-bezier(0.22, 1.35, 0.36, 1) both;
+    transform-origin: center bottom;
+  }
+
+  .modal-panel-out {
+    animation: modal-pop-out 0.26s cubic-bezier(0.4, 0, 1, 1) both;
+    transform-origin: center bottom;
+    pointer-events: none;
+  }
+
+  .modal-panel-in > * {
+    animation: modal-content-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .modal-panel-in > :nth-child(1) {
+    animation-delay: 0.04s;
+  }
+
+  .modal-panel-in > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  .modal-panel-in > :nth-child(3) {
+    animation-delay: 0.12s;
+  }
+
+  .modal-panel-in > :nth-child(n + 4) {
+    animation-delay: 0.16s;
+  }
+
+  @media (max-width: 639px) {
+    .modal-panel-in {
+      animation: modal-sheet-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transform-origin: center top;
+    }
+
+    .modal-panel-out {
+      animation: modal-sheet-out 0.3s cubic-bezier(0.4, 0, 0.6, 1) both;
+      transform-origin: center top;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .modal-backdrop-in,
+    .modal-backdrop-out,
+    .modal-panel-in,
+    .modal-panel-out,
+    .modal-panel-in > * {
+      animation-duration: 0.01ms;
+      animation-delay: 0s;
+    }
+  }
+}
