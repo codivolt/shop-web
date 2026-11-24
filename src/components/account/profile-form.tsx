@@ -1,8 +1,6 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -13,6 +11,7 @@ import { useUpdateProfile, useUploadAvatar } from "@/hooks/use-profile";
 import { apiErrorMessage } from "@/lib/api/client";
 import { absoluteImage } from "@/lib/format";
 import { profileSchema, type ProfileFormValues } from "@/lib/validation";
+import { Copy, Check } from "lucide-react";
 
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 
@@ -22,6 +21,15 @@ export function ProfileForm({ onDone }: { onDone?: () => void }) {
   const uploadAvatar = useUploadAvatar();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarSrc = absoluteImage(user?.avatarUrl);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyReferralCode = () => {
+    if (!user?.referralCode) return;
+    navigator.clipboard.writeText(user.referralCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    toast.success("کد رفرال کپی شد");
+  };
 
   const {
     register,
@@ -118,6 +126,37 @@ export function ProfileForm({ onDone }: { onDone?: () => void }) {
           />
         </div>
       </div>
+
+      {user?.referralCode && (
+        <div className="rounded-2xl border border-stone-200 bg-stone-50/60 p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs font-bold text-stone-700">کد رفرال شما</p>
+              <p className="mt-1 text-[11px] leading-5 text-stone-400">
+                این کد را با دوستان خود به اشتراک بگذارید تا از تخفیف‌ها بهره‌مند شوند.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="font-mono text-base font-medium text-stone-900 tracking-wider select-all">
+                {user.referralCode}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleCopyReferralCode}
+                aria-label={copied ? "کپی شد" : "کپی کردن کد رفرال"}
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <form onSubmit={onSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">

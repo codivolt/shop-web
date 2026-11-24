@@ -24,6 +24,7 @@ import {
 import { useAddresses } from "@/hooks/use-addresses";
 import { useCart, useClearCart } from "@/hooks/use-cart";
 import { useCreateOrder, useUploadReceipt } from "@/hooks/use-orders";
+import { useValidateDiscount } from "@/hooks/use-profile";
 import { useDeliveryMethods } from "@/hooks/use-delivery";
 import { usePaymentAccounts } from "@/hooks/use-payment-accounts";
 import { apiErrorMessage } from "@/lib/api/client";
@@ -53,6 +54,7 @@ function CheckoutView() {
   const paymentAccounts = usePaymentAccounts();
   const createOrder = useCreateOrder();
   const uploadReceipt = useUploadReceipt();
+  const validateDiscount = useValidateDiscount();
   const clearCart = useClearCart();
 
   const [pickedAddressId, setPickedAddressId] = useState<string | null>(null);
@@ -61,6 +63,9 @@ function CheckoutView() {
   const [showForm, setShowForm] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [appliedDiscountCode, setAppliedDiscountCode] = useState<string | null>(null);
   const receiptInputRef = useRef<HTMLInputElement>(null);
 
   const items = useMemo(() => cart.data ?? [], [cart.data]);
@@ -86,11 +91,40 @@ function CheckoutView() {
   const selectedDelivery = deliveryMethods.find((m) => m.id === selectedDeliveryId);
   const selectedPayment = accounts.find((a) => a.id === selectedPaymentId);
   const deliveryPrice = Number(selectedDelivery?.price ?? 0);
-  const totalAmount = Number(subtotal) + Number(deliveryPrice);
+  const totalAmount = Number(subtotal) + Number(deliveryPrice) - Number(discountAmount);
   const needsReceipt =
     Boolean(selectedPayment) &&
     RECEIPT_REQUIRED_TYPES.has((selectedPayment?.type as any) ?? "");
   const formVisible = showForm || (!addresses.isLoading && addressList.length === 0);
+
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) {
+      toast.error("کد تخفیف را وارد کنید");
+      return;
+    }
+    try {
+      const result = await validateDiscount.mutateAsync({
+        code: discountCode.trim(),
+        orderAmount: subtotal + deliveryPrice,
+      });
+      if (result.valid) {
+        setDiscountAmount(result.discountAmount);
+        setAppliedDiscountCode(discountCode.trim());
+        toast.success(`کد تخفیف اعمال شد: ${result.discountAmount.toLocaleString()} تومان`);
+      } else {
+        toast.error(result.message || "کد تخفیف معتبر نیست");
+      }
+    } catch (error) {
+      toast.error("خطا در اعمال کد تخفیف");
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    setDiscountCode("");
+    setDiscountAmount(0);
+    setAppliedDiscountCode(null);
+    toast.success("کد تخفیف حذف شد");
+  };
 
   const handleAddressCreated = (address: Address) => {
     setPickedAddressId(address.id);
@@ -309,6 +343,44 @@ function CheckoutView() {
             )}
           </CheckoutStep>
 
+          <CheckoutStep number={4} title="کد تخفیف">
+            <div className="mt-4">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                  placeholder="کد تخفیف را وارد کنید"
+                  className="flex-1 rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none"
+                  disabled={validateDiscount.isPending || appliedDiscountCode !== null}
+                />
+                {appliedDiscountCode ? (
+                  <button
+                    type="button"
+                    onClick={handleRemoveDiscount}
+                    className="px-4 py-3 rounded-xl bg-stone-100 text-stone-600 hover:bg-stone-200 transition-colors font-medium"
+                  >
+                    حذف
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleApplyDiscount}
+                    disabled={validateDiscount.isPending || !discountCode.trim()}
+                    className="px-4 py-3 rounded-xl bg-brand-600 text-white hover:bg-brand-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {validateDiscount.isPending ? "در حال بررسی..." : "اعمال"}
+                  </button>
+                )}
+              </div>
+              {appliedDiscountCode && (
+                <p className="mt-2 text-sm text-emerald-600 font-medium">
+                  ✓ کد <span className="font-mono">{appliedDiscountCode}</span> اعمال شد — تخفیف: {discountAmount.toLocaleString()} تومان
+                </p>
+              )}
+            </div>
+          </CheckoutStep>
+
           <OrderItemList items={items} />
         </div>
 
@@ -317,6 +389,7 @@ function CheckoutView() {
           subtotal={subtotal}
           deliveryPrice={deliveryPrice}
           totalAmount={totalAmount}
+          discountAmount={discountAmount}
           deliveryLabel="هزینه ارسال"
           actionLabel={orderPlaced ? (needsReceipt ? "آپلود فیش و نهایی کردن" : "مشاهده سفارش") : "ثبت نهایی سفارش"}
           onAction={orderPlaced ? (needsReceipt ? handleUploadReceipt : () => {

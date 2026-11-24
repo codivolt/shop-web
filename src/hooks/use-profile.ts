@@ -86,3 +86,22 @@ export function useApplyReferral() {
     },
   });
 }
+
+export function useValidateDiscount() {
+  const { token } = useAuthState();
+
+  return useMutation({
+    mutationFn: async (input: { code: string; orderAmount: number }) => {
+      const { data } = await http.post<{
+        valid: boolean;
+        discount?: { id: string; code: string; type: string; value: number };
+        discountAmount: number;
+        message?: string;
+      }>("/discounts/validate", {
+        code: input.code,
+        orderAmount: input.orderAmount,
+      });
+      return data;
+    },
+  });
+}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { normalizeImage } from "@/lib/format";
+import { absoluteImage } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 export function ProductImage({
@@ -16,7 +16,7 @@ export function ProductImage({
   priority?: boolean;
   className?: string;
 }) {
-  const normalized = normalizeImage(src);
+  const normalized = absoluteImage(src);
 
   if (!normalized) {
     return (

@@ -14,6 +14,7 @@ export interface OrderSummaryProps {
   subtotal: number;
   deliveryPrice: number;
   totalAmount: number;
+  discountAmount?: number;
   deliveryLabel?: string;
   actionLabel: string;
   actionHref?: string;
@@ -31,6 +32,7 @@ export function OrderSummary({
   subtotal,
   deliveryPrice,
   totalAmount,
+  discountAmount = 0,
   deliveryLabel = "هزینه ارسال",
   actionLabel,
   actionHref,
@@ -58,6 +60,12 @@ export function OrderSummary({
             <dt className="text-stone-500">جمع کالاها</dt>
             <dd className="font-bold text-stone-800">{formatPrice(subtotal)}</dd>
           </div>
+          {discountAmount && discountAmount > 0 && (
+            <div className="flex items-center justify-between text-emerald-600">
+              <dt className="text-stone-500">تخفیف کد</dt>
+              <dd className="font-semibold">-{formatPrice(discountAmount)}</dd>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <dt className="text-stone-500">{deliveryLabel}</dt>
             <dd className="font-semibold text-emerald-600">{deliveryPrice === 0 ? "رایگان" : formatPrice(deliveryPrice)}</dd>
