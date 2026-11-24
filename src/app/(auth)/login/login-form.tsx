@@ -15,6 +15,7 @@ import {
   useSendCode,
   useVerifyCode,
 } from "@/hooks/use-auth-mutations";
+import { useApplyReferral } from "@/hooks/use-profile";
 import { apiErrorMessage } from "@/lib/api/client";
 import { cn } from "@/lib/cn";
 import { SITE } from "@/lib/site";
@@ -46,6 +47,9 @@ export function LoginForm() {
   const [step, setStep] = useState<1 | 2>(1);
   const [phone, setPhone] = useState("");
   const [seconds, setSeconds] = useState(0);
+  const [referralCode, setReferralCode] = useState("");
+
+  const applyReferral = useApplyReferral();
 
   const nextParam = searchParams.get("next");
   const nextPath = nextParam && nextParam.startsWith("/") ? nextParam : "/";
@@ -97,6 +101,14 @@ export function LoginForm() {
     try {
       const auth = await verifyCode.mutateAsync({ phone, code: values.code });
       await login(auth);
+      if (referralCode.trim()) {
+        try {
+          await applyReferral.mutateAsync(referralCode.trim().toUpperCase());
+          toast.success("کد رفرال اعمال شد");
+        } catch (refError) {
+          toast.error(apiErrorMessage(refError));
+        }
+      }
       toast.success("خوش آمدید");
       router.replace(nextPath);
     } catch (error) {
@@ -108,6 +120,14 @@ export function LoginForm() {
     try {
       const auth = await passwordLogin.mutateAsync(values);
       await login(auth);
+      if (referralCode.trim()) {
+        try {
+          await applyReferral.mutateAsync(referralCode.trim().toUpperCase());
+          toast.success("کد رفرال اعمال شد");
+        } catch (refError) {
+          toast.error(apiErrorMessage(refError));
+        }
+      }
       toast.success("خوش آمدید");
       router.replace(nextPath);
     } catch (error) {
@@ -306,6 +326,16 @@ export function LoginForm() {
                   {...verifyForm.register("code")}
                 />
 
+                <Input
+                  id="referral-code-login"
+                  label="کد رفرال معرف (اختیاری)"
+                  placeholder="REF12345"
+                  dir="ltr"
+                  value={referralCode.toUpperCase()}
+                  onChange={(e) => setReferralCode(e.target.value)}
+                  className="uppercase"
+                />
+
                 <Button
                   type="submit"
                   size="lg"
@@ -357,6 +387,15 @@ export function LoginForm() {
                 required
                 error={passwordForm.formState.errors.password?.message}
                 {...passwordForm.register("password")}
+              />
+              <Input
+                id="referral-code-password"
+                label="کد رفرال معرف (اختیاری)"
+                placeholder="REF12345"
+                dir="ltr"
+                value={referralCode.toUpperCase()}
+                onChange={(e) => setReferralCode(e.target.value)}
+                className="uppercase"
               />
               <Button
                 type="submit"
