@@ -6,6 +6,7 @@ import { ProductImage } from "@/components/product/product-image";
 import { buttonStyles } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SectionHeading } from "@/components/ui/section";
+import { FeaturedSlider } from "@/components/home/FeaturedSlider";
 import { getBrands, getCategories, getProducts } from "@/lib/api/catalog";
 import { formatNumber, formatPrice } from "@/lib/format";
 import { SITE } from "@/lib/site";
@@ -272,6 +273,12 @@ export default async function HomePage() {
           ))}
         </div>
       </div>
+
+      {products.data.length > 0 && (
+        <section className="container-page mt-10">
+          <FeaturedSlider />
+        </section>
+      )}
 
       {categories.length > 0 ? (
         <section className="container-page mt-16">
