@@ -68,3 +68,21 @@ export function useSetPassword() {
     },
   });
 }
+
+export function useApplyReferral() {
+  const queryClient = useQueryClient();
+  const { token } = useAuthState();
+
+  return useMutation({
+    mutationFn: async (referralCode: string) => {
+      const { data } = await http.post<{ message: string }>(
+        "/users/me/referral",
+        { referralCode },
+      );
+      return data;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["me", token] });
+    },
+  });
+}

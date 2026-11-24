@@ -66,6 +66,15 @@ export const toEnglishDigits = (value: string) =>
     .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 1776))
     .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 1632));
 
+export const referralCodeSchema = z
+  .string()
+  .trim()
+  .min(1, "کد رفرال را وارد کنید")
+  .max(20, "کد رفرال حداکثر ۲۰ کاراکتر است")
+  .regex(/^[A-Z0-9]+$/, "کد رفرال باید فقط شامل حروف بزرگ و عدد باشد");
+
+export type ReferralCodeValues = z.infer<typeof referralCodeSchema>;
+
 export function isValidNationalId(value: string): boolean {
   if (!/^\d{10}$/.test(value) || /^(\d)\1{9}$/.test(value)) {
     return false;

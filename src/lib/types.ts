@@ -10,6 +10,8 @@ export interface User {
   role: UserRole;
   isActive: boolean;
   passwordSetAt?: string | null;
+  referralCode: string | null;
+  referredBy: string | null;
   createdAt: string;
   updatedAt: string;
 }
