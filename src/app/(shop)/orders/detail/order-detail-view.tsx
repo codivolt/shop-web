@@ -52,15 +52,14 @@ function OrderDetailContent() {
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [imageViewerOpen, setImageViewerOpen] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
-  if (order.isLoading) {
-    return (
-      <div className="container-page space-y-4 py-10" suppressHydrationWarning>
-        <Skeleton className="h-9 w-48 rounded-xl" />
-        <Skeleton className="h-40 w-full rounded-3xl" />
-        <Skeleton className="h-64 w-full rounded-3xl" />
-      </div>
-    );
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (order.isLoading && !mounted) {
+    return null;
   }
 
   if (order.isError || !order.data) {
