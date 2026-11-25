@@ -89,6 +89,8 @@ function OrderDetailContent() {
   const isReceiptRejected =
     hasReceipt && data.paymentStatus === "unpaid" && Boolean(data.rejectionReason);
 
+  const canUploadReceipt = needsReceipt || isReceiptRejected;
+
   const handleReceiptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     setReceiptFile(file);
@@ -133,7 +135,7 @@ function OrderDetailContent() {
         </div>
       </div>
 
-      {needsReceipt && (!hasReceipt || isReceiptRejected) && (
+      {canUploadReceipt && (!hasReceipt || isReceiptRejected) && (
         <div className="mt-6 rounded-2xl border border-dashed border-amber-200 bg-amber-50 p-6">
           <div className="flex items-start gap-3">
             <div className="flex shrink-0 items-center justify-center rounded-full bg-amber-100 p-2 text-amber-600">
