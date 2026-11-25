@@ -65,14 +65,23 @@ function OrderDetailContent() {
     Boolean(data.paymentMethod) &&
     RECEIPT_REQUIRED_TYPES.has(data.paymentMethod as any);
   const hasReceipt = Boolean(data?.receiptImageUrl);
+  const latestHistory = data?.receiptHistory?.[0];
+  const isReceiptPending =
+    hasReceipt && latestHistory?.status === "pending";
   const isReceiptRejected =
-    data && hasReceipt && data.paymentStatus === "unpaid" && Boolean(data.rejectionReason);
+    hasReceipt && latestHistory?.status === "rejected";
+  const isReceiptApproved =
+    hasReceipt && latestHistory?.status === "approved";
 
   const canUploadReceipt = needsReceipt || isReceiptRejected;
 
   // Countdown timer for receipt resubmission deadline
   useEffect(() => {
-    if (!data?.receiptDeadline || !isReceiptRejected || data.status === "failed") {
+    if (
+      !data?.receiptDeadline ||
+      !isReceiptRejected ||
+      data.status === "failed"
+    ) {
       setRemainingSeconds(0);
       return;
     }
@@ -271,7 +280,7 @@ function OrderDetailContent() {
           </div>
         )}
 
-        {hasReceipt && data.paymentStatus === "paid" && (
+        {isReceiptApproved && (
           <div className="mt-6 flex items-center gap-3 rounded-2xl border border-emerald-200/70 bg-emerald-50/60 p-4">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -294,30 +303,38 @@ function OrderDetailContent() {
           </div>
         )}
 
-        {hasReceipt && data.paymentStatus === "unpaid" && data.rejectionReason && (
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-rose-200/70 bg-rose-50/60 p-4">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </span>
-            <div className="min-w-0 flex-1">
-              <h3 className="text-[13px] font-bold text-rose-900">فیش پرداخت رد شد</h3>
-              <p className="mt-0.5 text-xs leading-5 text-rose-700/90">
-                <span className="font-semibold">دلیل:</span> «{data.rejectionReason}»
-              </p>
+        {isReceiptRejected && (
+          <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+            <div className="flex items-start gap-3">
+              <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-sm font-bold text-rose-900">فیش پرداخت رد شد</h3>
+                <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
+                  فیش پرداخت شما توسط ادمین رد شد.
+                </p>
+                {latestHistory?.rejectionReason && (
+                  <div className="mt-2 text-sm text-rose-700/90 italic">
+                    «{latestHistory.rejectionReason}»
+                  </div>
+                )}
+              </div>
             </div>
-            <Button
-              size="sm"
-              onClick={() => setImageViewerOpen(true)}
-              className="shrink-0 bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
-            >
-              نمایش فیش
-            </Button>
+            <div className="bg-rose-50/50 border-t border-rose-100 p-4 sm:p-5">
+              <Button
+                onClick={() => setImageViewerOpen(true)}
+                className="bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+              >
+                نمایش فیش
+              </Button>
+            </div>
           </div>
         )}
 
-        {hasReceipt && data.paymentStatus === "unpaid" && !data.rejectionReason && (
+        {isReceiptPending && (
           <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -325,9 +342,9 @@ function OrderDetailContent() {
               </svg>
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[13px] font-bold text-amber-900">فیش پرداخت بارگذاری شده</h3>
+              <h3 className="text-[13px] font-bold text-amber-900">در حال بررسی</h3>
               <p className="mt-0.5 text-xs leading-5 text-amber-700/90">
-                فیش شما بارگذاری شده و در انتظار تایید ادمین است.
+                فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
               </p>
             </div>
             <Button
@@ -337,6 +354,47 @@ function OrderDetailContent() {
             >
               نمایش فیش
             </Button>
+          </div>
+        )}
+
+        {data.receiptHistory && data.receiptHistory.length > 1 && (
+          <div className="mt-6 rounded-3xl border border-stone-100 bg-white p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-stone-900 mb-4">تاریخچه فیش‌ها</h3>
+            <div className="space-y-3">
+              {data.receiptHistory.map((h) => (
+                <div
+                  key={h.id}
+                  className="flex items-start gap-3 p-3 rounded-xl border border-stone-200/50 bg-stone-50/50"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600 text-xs font-bold">
+                    {h.status === "approved" ? "✓" : h.status === "rejected" ? "✗" : "⟳"}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm text-stone-700">
+                      {h.status === "approved"
+                        ? "تایید شده"
+                        : h.status === "rejected"
+                          ? "رد شده"
+                          : "در انتظار بررسی"}
+                    </p>
+                    {h.status === "rejected" && h.rejectionReason && (
+                      <p className="mt-0.5 text-xs text-rose-600 italic">
+                        «{h.rejectionReason}»
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-xs text-stone-400">
+                    {new Date(h.createdAt).toLocaleDateString("fa-IR", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
