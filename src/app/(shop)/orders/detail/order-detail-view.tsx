@@ -10,6 +10,7 @@ import { StatusBadge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui";
+import { ImageViewer } from "@/components/ui/ImageViewer";
 import { useOrder, useUploadReceipt } from "@/hooks/use-orders";
 import { apiErrorMessage } from "@/lib/api/client";
 import { cn } from "@/lib/cn";
@@ -49,6 +50,7 @@ function OrderDetailContent() {
   const uploadReceipt = useUploadReceipt();
   const receiptInputRef = useRef<HTMLInputElement>(null);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [imageViewerOpen, setImageViewerOpen] = useState(false);
 
   if (order.isLoading) {
     return (
@@ -105,7 +107,8 @@ function OrderDetailContent() {
   };
 
   return (
-    <div className="container-page py-10">
+    <>
+      <div className="container-page py-10">
       <div className="mb-6">
         <Link
           href="/orders"
@@ -188,18 +191,16 @@ function OrderDetailContent() {
               فیش پرداخت شما توسط ادمین تایید شد.
             </p>
           </div>
-          <a
-            href={data.receiptImageUrl ?? ""}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
+          <Button
+            onClick={() => setImageViewerOpen(true)}
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-800"
           >
             نمایش فیش
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-          </a>
+          </Button>
         </div>
       )}
 
@@ -219,18 +220,16 @@ function OrderDetailContent() {
               «{data.rejectionReason}»
             </div>
           </div>
-          <a
-            href={data.receiptImageUrl ?? ""}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-rose-700 underline-offset-4 hover:underline"
+          <Button
+            onClick={() => setImageViewerOpen(true)}
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-rose-700 hover:text-rose-800"
           >
             نمایش فیش
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-          </a>
+          </Button>
         </div>
       )}
 
@@ -247,18 +246,16 @@ function OrderDetailContent() {
               فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
             </p>
           </div>
-          <a
-            href={data.receiptImageUrl ?? ""}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-amber-700 underline-offset-4 hover:underline"
+          <Button
+            onClick={() => setImageViewerOpen(true)}
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-amber-700 hover:text-amber-800"
           >
             نمایش فیش
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
-          </a>
+          </Button>
         </div>
       )}
 
@@ -361,5 +358,13 @@ function OrderDetailContent() {
         </aside>
       </div>
     </div>
+
+    <ImageViewer
+      open={imageViewerOpen}
+      onClose={() => setImageViewerOpen(false)}
+      src={data.receiptImageUrl ?? null}
+      title="فیش پرداخت"
+    />
+      </>
   );
 }
