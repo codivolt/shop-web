@@ -55,7 +55,7 @@ function OrderDetailContent() {
 
   if (order.isLoading) {
     return (
-      <div className="container-page space-y-4 py-10">
+      <div className="container-page space-y-4 py-10" suppressHydrationWarning>
         <Skeleton className="h-9 w-48 rounded-xl" />
         <Skeleton className="h-40 w-full rounded-3xl" />
         <Skeleton className="h-64 w-full rounded-3xl" />
@@ -145,7 +145,7 @@ function OrderDetailContent() {
 
   return (
     <>
-      <div className="container-page py-10">
+      <div className="container-page py-10" suppressHydrationWarning>
       <div className="mb-6">
         <Link
           href="/orders"
