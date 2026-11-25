@@ -65,7 +65,10 @@ function OrderDetailContent() {
     Boolean(data.paymentMethod) &&
     RECEIPT_REQUIRED_TYPES.has(data.paymentMethod as any);
   const hasReceipt = Boolean(data?.receiptImageUrl);
-  const latestHistory = data?.receiptHistory?.[0];
+  const sortedHistory = [...(data?.receiptHistory ?? [])].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
+  const latestHistory = sortedHistory[0];
   const isReceiptPending =
     hasReceipt && latestHistory?.status === "pending";
   const isReceiptRejected =
