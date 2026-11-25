@@ -72,7 +72,8 @@ function OrderDetailContent() {
   const isReceiptPending =
     hasReceipt && latestHistory?.status === "pending";
   const isReceiptRejected =
-    hasReceipt && latestHistory?.status === "rejected";
+    (hasReceipt && latestHistory?.status === "rejected") ||
+    Boolean(data?.rejectionReason);
   const isReceiptApproved =
     hasReceipt && latestHistory?.status === "approved";
 
@@ -319,11 +320,11 @@ function OrderDetailContent() {
                 <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
                   فیش پرداخت شما توسط ادمین رد شد.
                 </p>
-                {latestHistory?.rejectionReason && (
-                  <div className="mt-2 text-sm text-rose-700/90 italic">
-                    «{latestHistory.rejectionReason}»
-                  </div>
-                )}
+                 {latestHistory?.rejectionReason || data?.rejectionReason ? (
+                   <div className="mt-2 text-sm text-rose-700/90 italic">
+                     «{latestHistory?.rejectionReason || data?.rejectionReason}»
+                   </div>
+                 ) : null}
               </div>
             </div>
             <div className="bg-rose-50/50 border-t border-rose-100 p-4 sm:p-5">
