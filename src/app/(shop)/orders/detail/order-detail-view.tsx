@@ -136,144 +136,169 @@ function OrderDetailContent() {
       </div>
 
       {canUploadReceipt && (!hasReceipt || isReceiptRejected) && (
-        <div className="mt-6 rounded-2xl border border-dashed border-amber-200 bg-amber-50 p-6">
-          <div className="flex items-start gap-3">
-            <div className="flex shrink-0 items-center justify-center rounded-full bg-amber-100 p-2 text-amber-600">
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+        <div className="mt-6 rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white shadow-sm overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
+            <div className="flex shrink-0 items-center justify-center rounded-xl bg-amber-100 p-3 text-amber-600">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <div>
-              <h3 className="text-sm font-bold text-amber-800">
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-amber-900">
                 {isReceiptRejected ? "بارگذاری فیش پرداخت جدید" : "بارگذاری فیش پرداخت"}
               </h3>
-              <p className="mt-1 text-sm text-amber-700">
+              <p className="mt-1 text-sm text-amber-700/90 leading-relaxed">
                 {isReceiptRejected
                   ? "فیش قبلی شما توسط ادمین رد شد. لطفا فیش صحیح را بارگذاری کنید."
                   : "روش پرداخت شما نیاز به بارگذاری فیش دارد. لطفا فیش پرداخت را بارگذاری کنید تا ادمین بتواند آن را بررسی نماید."}
               </p>
             </div>
           </div>
-          <div className="mt-4 space-y-3">
-            <label className="block cursor-pointer">
-              <Button
-                onClick={() => receiptInputRef.current?.click()}
-                disabled={uploadReceipt.isPending}
-                className="w-full"
-              >
-                {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
-              </Button>
-              <input
-                ref={receiptInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleReceiptChange}
-                className="sr-only"
-              />
-            </label>
-            {receiptFile && (
-              <>
-                <p className="text-xs text-amber-600 mt-1">
-                  فیش انتخاب شده: {receiptFile.name}
-                </p>
+          <div className="bg-amber-50/50 border-t border-amber-100 p-4 lg:p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <label className="block cursor-pointer flex-1">
                 <Button
-                  onClick={handleUploadReceipt}
+                  onClick={() => receiptInputRef.current?.click()}
                   disabled={uploadReceipt.isPending}
-                  className="w-full mt-2"
+                  className="w-full bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
                 >
-                  {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
+                  {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
                 </Button>
-              </>
-            )}
+                <input
+                  ref={receiptInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleReceiptChange}
+                  className="sr-only"
+                />
+              </label>
+              {receiptFile && (
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-1 max-w-sm">
+                  <span className="text-xs text-amber-700 truncate">
+                    فیش انتخاب شده: {receiptFile.name}
+                  </span>
+                  <Button
+                    onClick={handleUploadReceipt}
+                    disabled={uploadReceipt.isPending}
+                    className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+                  >
+                    {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
 
       {hasReceipt && data.paymentStatus === "paid" && (
-        <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 flex items-start gap-3">
-          <div className="flex shrink-0 items-center justify-center rounded-full bg-emerald-100 p-2 text-emerald-600">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+        <div className="mt-6 rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white shadow-sm overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
+            <div className="flex shrink-0 items-center justify-center rounded-xl bg-emerald-100 p-3 text-emerald-600">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-emerald-900">فیش پرداخت تایید شد</h3>
+              <p className="mt-1 text-sm text-emerald-700/90">
+                فیش پرداخت شما توسط ادمین تایید شد.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-emerald-800">فیش پرداخت تایید شد</h3>
-            <p className="mt-1 text-sm text-emerald-700">
-              فیش پرداخت شما توسط ادمین تایید شد.
-            </p>
+          <div className="bg-emerald-50/50 border-t border-emerald-100 p-4 lg:p-5">
+            <Button
+              onClick={() => setImageViewerOpen(true)}
+              className="bg-emerald-900 hover:bg-emerald-800 text-white shadow-sm"
+            >
+              نمایش فیش
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </Button>
           </div>
-          <Button
-            onClick={() => setImageViewerOpen(true)}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-800"
-          >
-            نمایش فیش
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </Button>
         </div>
       )}
 
       {hasReceipt && data.paymentStatus === "unpaid" && data.rejectionReason && (
-        <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-6 flex items-start gap-3">
-          <div className="flex shrink-0 items-center justify-center rounded-full bg-rose-100 p-2 text-rose-600">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-rose-800">فیش پرداخت رد شد</h3>
-            <p className="mt-1 text-sm text-rose-700">
-              فیش پرداخت شما توسط ادمین رد شد.
-            </p>
-            <div className="mt-2 text-sm text-rose-700 italic">
-              «{data.rejectionReason}»
+        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
+            <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-rose-900">فیش پرداخت رد شد</h3>
+              <p className="mt-1 text-sm text-rose-700/90">
+                فیش پرداخت شما توسط ادمین رد شد.
+              </p>
+              <div className="mt-2 text-sm text-rose-700/90 italic">
+                «{data.rejectionReason}»
+              </div>
             </div>
           </div>
-          <Button
-            onClick={() => setImageViewerOpen(true)}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-rose-700 hover:text-rose-800"
-          >
-            نمایش فیش
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </Button>
+          <div className="bg-rose-50/50 border-t border-rose-100 p-4 lg:p-5">
+            <Button
+              onClick={() => setImageViewerOpen(true)}
+              className="bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+            >
+              نمایش فیش
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </Button>
+          </div>
         </div>
       )}
 
       {hasReceipt && data.paymentStatus === "unpaid" && !data.rejectionReason && (
-        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 flex items-start gap-3">
-          <div className="flex shrink-0 items-center justify-center rounded-full bg-amber-100 p-2 text-amber-600">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+        <div className="mt-6 rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white shadow-sm overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
+            <div className="flex shrink-0 items-center justify-center rounded-xl bg-amber-100 p-3 text-amber-600">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-amber-900">فیش پرداخت بارگذاری شده</h3>
+              <p className="mt-1 text-sm text-amber-700/90">
+                فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-amber-800">فیش پرداخت بارگذاری شده</h3>
-            <p className="mt-1 text-sm text-amber-700">
-              فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
-            </p>
+          <div className="bg-amber-50/50 border-t border-amber-100 p-4 lg:p-5">
+            <Button
+              onClick={() => setImageViewerOpen(true)}
+              className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+            >
+              نمایش فیش
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </Button>
           </div>
-          <Button
-            onClick={() => setImageViewerOpen(true)}
-            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-amber-700 hover:text-amber-800"
-          >
-            نمایش فیش
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </Button>
         </div>
       )}
 
       {data.status === "cancelled" ? (
-        <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-700">
-          این سفارش لغو شده است. در صورت پرداخت، مبلغ طی فرآیند بازگشت وجه
-          واریز می‌شود.
+        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+          <div className="flex items-start gap-3">
+            <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-rose-900">سفارش لغو شده</h3>
+              <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
+                این سفارش لغو شده است. در صورت پرداخت، مبلغ طی فرآیند بازگشت وجه واریز می‌شود.
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
         <ol className="mt-8 grid grid-cols-4 gap-2">
