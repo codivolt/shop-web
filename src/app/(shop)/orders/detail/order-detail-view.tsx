@@ -172,9 +172,18 @@ function OrderDetailContent() {
               />
             </label>
             {receiptFile && (
-              <p className="text-xs text-amber-600 mt-1">
-                فیش انتخاب شده: {receiptFile.name}
-              </p>
+              <>
+                <p className="text-xs text-amber-600 mt-1">
+                  فیش انتخاب شده: {receiptFile.name}
+                </p>
+                <Button
+                  onClick={handleUploadReceipt}
+                  disabled={uploadReceipt.isPending}
+                  className="w-full mt-2"
+                >
+                  {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
+                </Button>
+              </>
             )}
           </div>
         </div>
