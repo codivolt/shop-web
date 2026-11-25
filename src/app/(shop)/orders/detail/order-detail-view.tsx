@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 import { RequireAuth } from "@/components/auth/require-auth";
 import { StatusBadge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOrder } from "@/hooks/use-orders";
+import { Button } from "@/components/ui";
+import { useOrder, useUploadReceipt } from "@/hooks/use-orders";
 import { apiErrorMessage } from "@/lib/api/client";
 import { cn } from "@/lib/cn";
 import {
@@ -17,6 +20,12 @@ import {
   formatPrice,
 } from "@/lib/format";
 import type { OrderStatus } from "@/lib/types";
+
+const RECEIPT_REQUIRED_TYPES = new Set([
+  "card_to_card",
+  "sheba",
+  "crypto",
+]);
 
 const PROGRESS_STEPS: { status: OrderStatus; label: string }[] = [
   { status: "pending", label: "ثبت شد" },
@@ -37,6 +46,9 @@ function OrderDetailContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? "";
   const order = useOrder(id);
+  const uploadReceipt = useUploadReceipt();
+  const receiptInputRef = useRef<HTMLInputElement>(null);
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
 
   if (order.isLoading) {
     return (
@@ -68,6 +80,30 @@ function OrderDetailContent() {
   const payment = PAYMENT_STATUS_META[data.paymentStatus];
   const currentStep = PROGRESS_STEPS.findIndex((step) => step.status === data.status);
 
+  const needsReceipt =
+    Boolean(data?.paymentMethod) &&
+    RECEIPT_REQUIRED_TYPES.has(data.paymentMethod as any);
+  const hasReceipt = Boolean(data?.receiptImageUrl);
+  const isReceiptRejected =
+    hasReceipt && data.paymentStatus === "unpaid" && Boolean(data.rejectionReason);
+
+  const handleReceiptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setReceiptFile(file);
+  };
+
+  const handleUploadReceipt = async () => {
+    if (!id || !receiptFile) return;
+    try {
+      await uploadReceipt.mutateAsync({ orderId: id, file: receiptFile });
+      setReceiptFile(null);
+      receiptInputRef.current?.value && (receiptInputRef.current.value = "");
+      toast.success("فیش پرداخت بارگذاری شد");
+    } catch (error) {
+      toast.error(apiErrorMessage(error));
+    }
+  };
+
   return (
     <div className="container-page py-10">
       <div className="mb-6">
@@ -93,6 +129,138 @@ function OrderDetailContent() {
           <StatusBadge label={payment.label} className={payment.className} />
         </div>
       </div>
+
+      {needsReceipt && (!hasReceipt || isReceiptRejected) && (
+        <div className="mt-6 rounded-2xl border border-dashed border-amber-200 bg-amber-50 p-6">
+          <div className="flex items-start gap-3">
+            <div className="flex shrink-0 items-center justify-center rounded-full bg-amber-100 p-2 text-amber-600">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-amber-800">
+                {isReceiptRejected ? "بارگذاری فیش پرداخت جدید" : "بارگذاری فیش پرداخت"}
+              </h3>
+              <p className="mt-1 text-sm text-amber-700">
+                {isReceiptRejected
+                  ? "فیش قبلی شما توسط ادمین رد شد. لطفا فیش صحیح را بارگذاری کنید."
+                  : "روش پرداخت شما نیاز به بارگذاری فیش دارد. لطفا فیش پرداخت را بارگذاری کنید تا ادمین بتواند آن را بررسی نماید."}
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 space-y-3">
+            <label className="block cursor-pointer">
+              <Button
+                onClick={() => receiptInputRef.current?.click()}
+                disabled={uploadReceipt.isPending}
+                className="w-full"
+              >
+                {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
+              </Button>
+              <input
+                ref={receiptInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleReceiptChange}
+                className="sr-only"
+              />
+            </label>
+            {receiptFile && (
+              <p className="text-xs text-amber-600 mt-1">
+                فیش انتخاب شده: {receiptFile.name}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {hasReceipt && data.paymentStatus === "paid" && (
+        <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 flex items-start gap-3">
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-emerald-100 p-2 text-emerald-600">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-emerald-800">فیش پرداخت تایید شد</h3>
+            <p className="mt-1 text-sm text-emerald-700">
+              فیش پرداخت شما توسط ادمین تایید شد.
+            </p>
+          </div>
+          <a
+            href={data.receiptImageUrl ?? ""}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 underline-offset-4 hover:underline"
+          >
+            نمایش فیش
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </a>
+        </div>
+      )}
+
+      {hasReceipt && data.paymentStatus === "unpaid" && data.rejectionReason && (
+        <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-6 flex items-start gap-3">
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-rose-100 p-2 text-rose-600">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-rose-800">فیش پرداخت رد شد</h3>
+            <p className="mt-1 text-sm text-rose-700">
+              فیش پرداخت شما توسط ادمین رد شد.
+            </p>
+            <div className="mt-2 text-sm text-rose-700 italic">
+              «{data.rejectionReason}»
+            </div>
+          </div>
+          <a
+            href={data.receiptImageUrl ?? ""}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-rose-700 underline-offset-4 hover:underline"
+          >
+            نمایش فیش
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </a>
+        </div>
+      )}
+
+      {hasReceipt && data.paymentStatus === "unpaid" && !data.rejectionReason && (
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-6 flex items-start gap-3">
+          <div className="flex shrink-0 items-center justify-center rounded-full bg-amber-100 p-2 text-amber-600">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-amber-800">فیش پرداخت بارگذاری شده</h3>
+            <p className="mt-1 text-sm text-amber-700">
+              فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
+            </p>
+          </div>
+          <a
+            href={data.receiptImageUrl ?? ""}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-amber-700 underline-offset-4 hover:underline"
+          >
+            نمایش فیش
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </a>
+        </div>
+      )}
 
       {data.status === "cancelled" ? (
         <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-700">
