@@ -174,7 +174,8 @@ export type OrderStatus =
   | "processing"
   | "shipped"
   | "delivered"
-  | "cancelled";
+  | "cancelled"
+  | "failed";
 
 export type PaymentStatus = "unpaid" | "paid" | "refunded";
 
@@ -199,6 +200,7 @@ export interface Order {
   paymentMethod: string | null;
   receiptImageUrl: string | null;
   rejectionReason: string | null;
+  receiptDeadline: string | null;
   totalAmount: number;
   createdAt: string;
   updatedAt: string;

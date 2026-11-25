@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import { RequireAuth } from "@/components/auth/require-auth";
@@ -51,6 +51,7 @@ function OrderDetailContent() {
   const receiptInputRef = useRef<HTMLInputElement>(null);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [imageViewerOpen, setImageViewerOpen] = useState(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
 
   if (order.isLoading) {
     return (
@@ -91,6 +92,40 @@ function OrderDetailContent() {
 
   const canUploadReceipt = needsReceipt || isReceiptRejected;
 
+  // Countdown timer for receipt resubmission deadline
+  useEffect(() => {
+    if (!data.receiptDeadline || !isReceiptRejected || data.status === "failed") {
+      setRemainingSeconds(0);
+      return;
+    }
+
+    const deadline = new Date(data.receiptDeadline).getTime();
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = deadline - now;
+      if (diff <= 0) {
+        setRemainingSeconds(0);
+      } else {
+        setRemainingSeconds(Math.ceil(diff / 1000));
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [data.receiptDeadline, isReceiptRejected, data.status]);
+
+  const hours = Math.floor(remainingSeconds / 3600);
+  const minutes = Math.floor((remainingSeconds % 3600) / 60);
+  const seconds = remainingSeconds % 60;
+  const timeLeft =
+    remainingSeconds > 0
+      ? `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+      : null;
+
+  const isReceiptExpired =
+    isReceiptRejected && data.receiptDeadline && new Date(data.receiptDeadline) <= new Date();
+
   const handleReceiptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     setReceiptFile(file);
@@ -114,9 +149,10 @@ function OrderDetailContent() {
       <div className="mb-6">
         <Link
           href="/orders"
-          className="text-xs font-semibold text-stone-500 transition hover:text-brand-800"
+          className="group inline-flex items-center gap-1.5 rounded-full border border-stone-200/80 bg-white px-3.5 py-1.5 text-xs font-semibold text-stone-500 shadow-sm transition hover:border-brand-200 hover:text-brand-800"
         >
-          → بازگشت به سفارش‌ها
+          <span className="transition group-hover:-translate-x-0.5">→</span>
+          بازگشت به سفارش‌ها
         </Link>
       </div>
 
@@ -130,162 +166,173 @@ function OrderDetailContent() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <StatusBadge label={status.label} className={status.className} />
-          <StatusBadge label={payment.label} className={payment.className} />
+          <StatusBadge label={status.label} className={cn(status.className, "shadow-sm")} />
+          <StatusBadge label={payment.label} className={cn(payment.className, "shadow-sm")} />
         </div>
       </div>
 
-      {canUploadReceipt && (!hasReceipt || isReceiptRejected) && (
-        <div className="mt-6 rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white shadow-sm overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
-            <div className="flex shrink-0 items-center justify-center rounded-xl bg-amber-100 p-3 text-amber-600">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-sm font-bold text-amber-900">
-                {isReceiptRejected ? "بارگذاری فیش پرداخت جدید" : "بارگذاری فیش پرداخت"}
-              </h3>
-              <p className="mt-1 text-sm text-amber-700/90 leading-relaxed">
-                {isReceiptRejected
-                  ? "فیش قبلی شما توسط ادمین رد شد. لطفا فیش صحیح را بارگذاری کنید."
-                  : "روش پرداخت شما نیاز به بارگذاری فیش دارد. لطفا فیش پرداخت را بارگذاری کنید تا ادمین بتواند آن را بررسی نماید."}
-              </p>
-            </div>
-          </div>
-          <div className="bg-amber-50/50 border-t border-amber-100 p-4 lg:p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-              <label className="block cursor-pointer flex-1">
-                <Button
-                  onClick={() => receiptInputRef.current?.click()}
-                  disabled={uploadReceipt.isPending}
-                  className="w-full bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
-                >
-                  {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
-                </Button>
-                <input
-                  ref={receiptInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleReceiptChange}
-                  className="sr-only"
-                />
-              </label>
-              {receiptFile && (
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-1 max-w-sm">
-                  <span className="text-xs text-amber-700 truncate">
-                    فیش انتخاب شده: {receiptFile.name}
-                  </span>
-                  <Button
-                    onClick={handleUploadReceipt}
-                    disabled={uploadReceipt.isPending}
-                    className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
-                  >
-                    {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {hasReceipt && data.paymentStatus === "paid" && (
-        <div className="mt-6 rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white shadow-sm overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
-            <div className="flex shrink-0 items-center justify-center rounded-xl bg-emerald-100 p-3 text-emerald-600">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-sm font-bold text-emerald-900">فیش پرداخت تایید شد</h3>
-              <p className="mt-1 text-sm text-emerald-700/90">
-                فیش پرداخت شما توسط ادمین تایید شد.
-              </p>
-            </div>
-          </div>
-          <div className="bg-emerald-50/50 border-t border-emerald-100 p-4 lg:p-5">
-            <Button
-              onClick={() => setImageViewerOpen(true)}
-              className="bg-emerald-900 hover:bg-emerald-800 text-white shadow-sm"
-            >
-              نمایش فیش
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {hasReceipt && data.paymentStatus === "unpaid" && data.rejectionReason && (
-        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
+      {data.status === "failed" && (
+        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+          <div className="flex items-start gap-3">
             <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-bold text-rose-900">فیش پرداخت رد شد</h3>
-              <p className="mt-1 text-sm text-rose-700/90">
-                فیش پرداخت شما توسط ادمین رد شد.
+              <h3 className="text-sm font-bold text-rose-900">سفارش منقضی شده</h3>
+              <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
+                مهلت بارگذاری فیش پرداخت به پایان رسید و سفارش شما به دلیل عدم پرداخت منقضی شد.
               </p>
-              <div className="mt-2 text-sm text-rose-700/90 italic">
-                «{data.rejectionReason}»
-              </div>
             </div>
           </div>
-          <div className="bg-rose-50/50 border-t border-rose-100 p-4 lg:p-5">
+          <div className="bg-rose-50/50 border-t border-rose-100 p-4 sm:p-5">
             <Button
-              onClick={() => setImageViewerOpen(true)}
-              className="bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+              onClick={() => {
+                window.location.href = "/cart";
+              }}
+              className="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
             >
-              نمایش فیش
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
+              ثبت سفارش جدید
             </Button>
           </div>
+        </div>
+      )}
+
+      {canUploadReceipt && (!hasReceipt || isReceiptRejected) && (
+        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4 sm:flex-row sm:items-center">
+          <div className="flex flex-1 items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </span>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-[13px] font-bold text-amber-900">
+                {isReceiptRejected ? "بارگذاری فیش پرداخت جدید" : "بارگذاری فیش پرداخت"}
+              </h3>
+              <p className="mt-0.5 text-xs leading-5 text-amber-700/90">
+                {isReceiptRejected
+                  ? "فیش قبلی شما توسط ادمین رد شد. لطفا فیش صحیح را بارگذاری کنید."
+                  : "برای بررسی پرداخت، فیش پرداخت را بارگذاری کنید."}
+              </p>
+              {isReceiptRejected && timeLeft && (
+                <p className="mt-1 text-xs font-bold text-amber-600">
+                  زمان باقی‌مانده: {timeLeft}
+                </p>
+              )}
+              {isReceiptRejected && isReceiptExpired && (
+                <p className="mt-1 text-xs font-bold text-rose-600">
+                  مهلت بارگذاری فیش به پایان رسیده است.
+                </p>
+              )}
+            </div>
+          </div>
+          <input
+            ref={receiptInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleReceiptChange}
+            className="sr-only"
+          />
+          {receiptFile ? (
+            <div className="flex items-center gap-2 sm:shrink-0">
+              <span className="max-w-[9rem] truncate text-xs text-amber-700">
+                {receiptFile.name}
+              </span>
+              <Button
+                size="sm"
+                onClick={handleUploadReceipt}
+                disabled={uploadReceipt.isPending}
+                className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+              >
+                {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              onClick={() => receiptInputRef.current?.click()}
+              disabled={uploadReceipt.isPending}
+              className="self-start sm:self-auto bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+            >
+              {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
+            </Button>
+          )}
+        </div>
+      )}
+
+      {hasReceipt && data.paymentStatus === "paid" && (
+        <div className="mt-6 flex items-center gap-3 rounded-2xl border border-emerald-200/70 bg-emerald-50/60 p-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-[13px] font-bold text-emerald-900">فیش پرداخت تایید شد</h3>
+            <p className="mt-0.5 text-xs leading-5 text-emerald-700/90">
+              فیش پرداخت شما توسط ادمین تایید شد.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => setImageViewerOpen(true)}
+            className="shrink-0 bg-emerald-900 hover:bg-emerald-800 text-white shadow-sm"
+          >
+            نمایش فیش
+          </Button>
+        </div>
+      )}
+
+      {hasReceipt && data.paymentStatus === "unpaid" && data.rejectionReason && (
+        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-rose-200/70 bg-rose-50/60 p-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-100 text-rose-600">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-[13px] font-bold text-rose-900">فیش پرداخت رد شد</h3>
+            <p className="mt-0.5 text-xs leading-5 text-rose-700/90">
+              <span className="font-semibold">دلیل:</span> «{data.rejectionReason}»
+            </p>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => setImageViewerOpen(true)}
+            className="shrink-0 bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+          >
+            نمایش فیش
+          </Button>
         </div>
       )}
 
       {hasReceipt && data.paymentStatus === "unpaid" && !data.rejectionReason && (
-        <div className="mt-6 rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white shadow-sm overflow-hidden">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4 p-5 lg:p-6">
-            <div className="flex shrink-0 items-center justify-center rounded-xl bg-amber-100 p-3 text-amber-600">
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h3 className="text-sm font-bold text-amber-900">فیش پرداخت بارگذاری شده</h3>
-              <p className="mt-1 text-sm text-amber-700/90">
-                فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
-              </p>
-            </div>
+        <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-[13px] font-bold text-amber-900">فیش پرداخت بارگذاری شده</h3>
+            <p className="mt-0.5 text-xs leading-5 text-amber-700/90">
+              فیش شما بارگذاری شده و در انتظار تایید ادمین است.
+            </p>
           </div>
-          <div className="bg-amber-50/50 border-t border-amber-100 p-4 lg:p-5">
-            <Button
-              onClick={() => setImageViewerOpen(true)}
-              className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
-            >
-              نمایش فیش
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </Button>
-          </div>
+          <Button
+            size="sm"
+            onClick={() => setImageViewerOpen(true)}
+            className="shrink-0 bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+          >
+            نمایش فیش
+          </Button>
         </div>
       )}
 
       {data.status === "cancelled" ? (
-        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+        <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)] overflow-hidden p-6">
           <div className="flex items-start gap-3">
             <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -301,63 +348,85 @@ function OrderDetailContent() {
           </div>
         </div>
       ) : (
-        <ol className="mt-8 grid grid-cols-4 gap-2">
-          {PROGRESS_STEPS.map((step, index) => {
-            const active = index <= currentStep;
-            return (
-              <li key={step.status} className="text-center">
-                <div className="flex items-center">
+        <div className="mt-8 rounded-3xl border border-stone-200/70 bg-white p-6 shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)] sm:p-7">
+          <ol className="relative grid grid-cols-4 gap-2">
+            <span
+              aria-hidden
+              className="absolute top-4 right-[12.5%] left-[12.5%] h-0.5 -translate-y-1/2 rounded-full bg-stone-100"
+            />
+            <span
+              aria-hidden
+              className="absolute top-4 right-[12.5%] h-0.5 -translate-y-1/2 rounded-full bg-gradient-to-l from-brand-400 to-brand-600 transition-all duration-500"
+              style={{
+                width: `${(Math.max(currentStep, 0) / (PROGRESS_STEPS.length - 1)) * 75}%`,
+              }}
+            />
+            {PROGRESS_STEPS.map((step, index) => {
+              const active = index <= currentStep;
+              const isCurrent = index === currentStep;
+              return (
+                <li key={step.status} className="relative text-center">
                   <span
                     className={cn(
-                      "mx-auto flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ring-4",
+                      "mx-auto flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ring-4 transition-all duration-300",
                       active
-                        ? "bg-brand-700 text-white ring-brand-100"
+                        ? "bg-gradient-to-br from-brand-500 to-brand-700 text-white ring-brand-100 shadow-md shadow-brand-700/20"
                         : "bg-stone-100 text-stone-400 ring-white",
+                      isCurrent && "scale-110",
                     )}
                   >
                     {index + 1}
                   </span>
-                </div>
-                <p
-                  className={cn(
-                    "mt-2 text-[11px] font-bold",
-                    active ? "text-stone-800" : "text-stone-400",
-                  )}
-                >
-                  {step.label}
-                </p>
-              </li>
-            );
-          })}
-        </ol>
+                  <p
+                    className={cn(
+                      "mt-2.5 text-[11px] font-bold transition-colors",
+                      active ? "text-stone-800" : "text-stone-400",
+                    )}
+                  >
+                    {step.label}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       )}
 
-      <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
-        <section className="rounded-3xl border border-stone-200/80 bg-white p-6">
-          <h2 className="text-base font-black text-stone-900">اقلام سفارش</h2>
-          <div className="mt-4 overflow-x-auto">
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-[1fr_340px]">
+        <section className="overflow-hidden rounded-3xl border border-stone-200/70 bg-white shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)]">
+          <div className="flex items-center gap-2.5 border-b border-stone-100 px-6 py-5">
+            <span className="h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600" />
+            <h2 className="text-base font-black text-stone-900">اقلام سفارش</h2>
+            <span className="mr-auto rounded-full bg-stone-100 px-2.5 py-0.5 text-[11px] font-bold text-stone-500">
+              {data.items.length.toLocaleString("fa-IR")} قلم
+            </span>
+          </div>
+          <div className="overflow-x-auto px-2">
             <table className="w-full text-right text-sm">
               <thead>
-                <tr className="border-b border-stone-200 text-[11px] text-stone-500">
-                  <th className="py-3 font-semibold">محصول</th>
-                  <th className="py-3 font-semibold">قیمت واحد</th>
-                  <th className="py-3 font-semibold">تعداد</th>
-                  <th className="py-3 font-semibold">جمع</th>
+                <tr className="text-[11px] text-stone-500">
+                  <th className="px-4 py-3 font-semibold">محصول</th>
+                  <th className="px-4 py-3 font-semibold">قیمت واحد</th>
+                  <th className="px-4 py-3 font-semibold">تعداد</th>
+                  <th className="px-4 py-3 font-semibold">جمع</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((item) => (
-                  <tr key={item.id} className="border-b border-stone-100 last:border-none">
-                    <td className="py-3.5 font-semibold text-stone-800">
+                  <tr
+                    key={item.id}
+                    className="border-t border-stone-100 transition-colors hover:bg-stone-50/60"
+                  >
+                    <td className="px-4 py-3.5 font-semibold text-stone-800">
                       {item.productNameSnapshot}
                     </td>
-                    <td className="py-3.5 text-stone-600">
+                    <td className="px-4 py-3.5 text-stone-600">
                       {formatPrice(item.unitPrice)}
                     </td>
-                    <td className="py-3.5 text-stone-600">
+                    <td className="px-4 py-3.5 text-stone-600">
                       {item.quantity.toLocaleString("fa-IR")}
                     </td>
-                    <td className="py-3.5 font-bold text-stone-900">
+                    <td className="px-4 py-3.5 font-bold text-stone-900">
                       {formatPrice(item.totalPrice)}
                     </td>
                   </tr>
@@ -367,30 +436,35 @@ function OrderDetailContent() {
           </div>
         </section>
 
-        <aside className="rounded-3xl border border-stone-200/80 bg-white p-6">
-          <h2 className="text-base font-black text-stone-900">خلاصه پرداخت</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex items-center justify-between">
-              <dt className="text-stone-500">جمع کالاها</dt>
-              <dd className="font-bold text-stone-800">
-                {formatPrice(data.totalAmount)}
-              </dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-stone-500">هزینه ارسال</dt>
-              <dd className="font-semibold text-emerald-600">رایگان</dd>
-            </div>
-            <div className="flex items-center justify-between border-t border-dashed border-stone-200 pt-4">
-              <dt className="font-bold text-stone-700">مبلغ کل</dt>
-              <dd className="text-lg font-black text-brand-800">
-                {formatPrice(data.totalAmount)}
-              </dd>
-            </div>
-          </dl>
+        <aside className="overflow-hidden rounded-3xl border border-stone-200/70 bg-white shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)]">
+          <div className="flex items-center gap-2.5 border-b border-stone-100 px-6 py-5">
+            <span className="h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600" />
+            <h2 className="text-base font-black text-stone-900">خلاصه پرداخت</h2>
+          </div>
+          <div className="p-6">
+            <dl className="space-y-3 text-sm">
+              <div className="flex items-center justify-between">
+                <dt className="text-stone-500">جمع کالاها</dt>
+                <dd className="font-bold text-stone-800">
+                  {formatPrice(data.totalAmount)}
+                </dd>
+              </div>
+              <div className="flex items-center justify-between">
+                <dt className="text-stone-500">هزینه ارسال</dt>
+                <dd className="font-semibold text-emerald-600">رایگان</dd>
+              </div>
+              <div className="flex items-center justify-between rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100/50 px-4 py-3.5 ring-1 ring-inset ring-brand-100">
+                <dt className="font-bold text-brand-900">مبلغ کل</dt>
+                <dd className="text-lg font-black text-brand-800">
+                  {formatPrice(data.totalAmount)}
+                </dd>
+              </div>
+            </dl>
 
-          <p className="mt-5 rounded-xl bg-stone-50 px-4 py-3 text-[11px] leading-5 text-stone-500">
-            در صورت نیاز به تغییر یا لغو سفارش، از طریق پشتیبانی اقدام کنید.
-          </p>
+            <p className="mt-5 rounded-xl bg-stone-50 px-4 py-3 text-[11px] leading-5 text-stone-500 ring-1 ring-inset ring-stone-100">
+              در صورت نیاز به تغییر یا لغو سفارش، از طریق پشتیبانی اقدام کنید.
+            </p>
+          </div>
         </aside>
       </div>
     </div>
