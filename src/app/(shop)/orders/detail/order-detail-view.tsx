@@ -336,7 +336,7 @@ function OrderDetailContent() {
         <section className="rounded-3xl border border-stone-200/80 bg-white p-6">
           <h2 className="text-base font-black text-stone-900">اقلام سفارش</h2>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[520px] text-right text-sm">
+            <table className="w-full text-right text-sm">
               <thead>
                 <tr className="border-b border-stone-200 text-[11px] text-stone-500">
                   <th className="py-3 font-semibold">محصول</th>
