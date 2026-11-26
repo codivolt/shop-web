@@ -81,6 +81,10 @@ export const ORDER_STATUS_META: Record<
     label: "لغو شده",
     className: "bg-rose-500/15 text-rose-300 ring-rose-400/30",
   },
+  failed: {
+    label: "منقضی شده",
+    className: "bg-rose-50 text-rose-700 ring-rose-200",
+  },
 };
 
 export const PAYMENT_STATUS_META: Record<

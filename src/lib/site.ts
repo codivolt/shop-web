@@ -1,14 +1,14 @@
 export const SITE = {
   name: "رولچی",
   shortName: "رولچی",
-  tagline: "رول کن، مال خودت باش",
+  tagline: "رولچی، سیگار خودتو رول کن",
   description:
     "رولچی؛ توتون و سیگار خیابونی از دل شهر. توتون دست‌چین، کاغذ و فیلتر رول، لوازم رول‌کردن و ارسال سریع به سراسر ایران.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001",
   locale: "fa_IR",
-  phone: "۰۲۱-۹۱۰۰۰۰۰۰",
+  phone: "09013247898",
   email: "support@rollchi.example",
-  address: "تهران، خیابان ولیعصر، پلاک ۱۲۰",
+  address: "از دل خیابون های تهران",
 } as const;
 
 export const API_URL =

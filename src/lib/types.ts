@@ -174,9 +174,23 @@ export type OrderStatus =
   | "processing"
   | "shipped"
   | "delivered"
-  | "cancelled";
+  | "cancelled"
+  | "failed";
 
 export type PaymentStatus = "unpaid" | "paid" | "refunded";
+
+export type ReceiptHistoryStatus = "pending" | "approved" | "rejected";
+
+export interface ReceiptHistory {
+  id: string;
+  orderId: string;
+  receiptImageUrl: string | null;
+  status: ReceiptHistoryStatus;
+  rejectionReason: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface OrderItem {
   id: string;
@@ -198,6 +212,9 @@ export interface Order {
   paymentStatus: PaymentStatus;
   paymentMethod: string | null;
   receiptImageUrl: string | null;
+  rejectionReason: string | null;
+  receiptDeadline: string | null;
+  receiptHistory: ReceiptHistory[];
   totalAmount: number;
   createdAt: string;
   updatedAt: string;

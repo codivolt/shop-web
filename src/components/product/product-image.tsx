@@ -35,7 +35,7 @@ export function ProductImage({
             strokeLinecap="round"
           />
         </svg>
-        <span className="text-[11px] font-medium text-stone-400">بدون تصویر</span>
+        <span className="font-medium text-[11px] text-stone-400">بدون تصویر</span>
       </div>
     );
   }
@@ -47,7 +47,7 @@ export function ProductImage({
       fill
       sizes={sizes}
       priority={priority}
-      unoptimized={normalized.startsWith("data:") || normalized.startsWith("blob:")}
+      unoptimized={normalized.startsWith("data:") || normalized.startsWith("blob:") || normalized.startsWith("http")}
       className={cn("object-cover", className)}
     />
   );

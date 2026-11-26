@@ -8,12 +8,13 @@ import { ProductImage } from "@/components/product/product-image";
 import { buttonStyles } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SectionHeading } from "@/components/ui/section";
+import { FeaturedSlider } from "@/components/home/FeaturedSlider";
 import { getBrands, getCategories, getProducts } from "@/lib/api/catalog";
 import { formatNumber, formatPrice } from "@/lib/format";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `${SITE.name} | ${SITE.tagline}`,
+  title: { absolute: SITE.tagline },
   description: SITE.description,
   alternates: { canonical: "/" },
 };
@@ -147,7 +148,7 @@ export default async function HomePage() {
             </span>
             <h1 className="font-display mt-6 max-w-xl text-4xl leading-[1.45] sm:text-5xl sm:leading-[1.35]">
               رولچی،
-              <span className="text-splash block">رول کن، مال خودت باش</span>
+              <span className="text-splash block">سیگار خودتو رول کن</span>
             </h1>
             <p className="mt-5 max-w-lg text-sm leading-7 text-stone-400 sm:text-base sm:leading-8">
               توتون دست‌چین، کاغذ و فیلتر رول و لوازم رول‌کردن؛ همه‌چیز برای اینکه

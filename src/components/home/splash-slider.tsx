@@ -48,7 +48,7 @@ const SLIDES: Slide[] = [
   },
   {
     key: "roll",
-    eyebrow: "رول کن، مال خودت باش",
+    eyebrow: "سیگار خودتو رول کن",
     title: "سیگارت رو",
     highlight: "خودت رول کن",
     description:
@@ -89,7 +89,6 @@ const toFa = (value: number) => value.toLocaleString("fa-IR");
 export function SplashSlider() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const go = useCallback((direction: number) => {
     setIndex((current) => (current + direction + SLIDES.length) % SLIDES.length);
@@ -103,14 +102,6 @@ export function SplashSlider() {
     return () => clearTimeout(timer);
   }, [index, paused]);
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse") return;
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width - 0.5;
-    const y = (event.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: -y * 7, y: x * 9 });
-  };
-
   const slide = SLIDES[index];
 
   return (
@@ -119,26 +110,17 @@ export function SplashSlider() {
       aria-label="ویترین رولچی"
       className="container-page mt-14"
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => {
-        setPaused(false);
-        setTilt({ x: 0, y: 0 });
-      }}
+      onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div
-        className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-ink-900 shadow-2xl shadow-black/60 transition-transform duration-300 ease-out will-change-transform"
-        onPointerMove={handlePointerMove}
-        style={{
-          transform: `perspective(1800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        }}
-      >
+      <div className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-ink-900 shadow-2xl shadow-black/60">
         {SLIDES.map((item, itemIndex) => (
           <div
             key={item.key}
             aria-hidden
             className={cn(
-              "absolute inset-0 bg-gradient-to-l transition-opacity duration-1000",
+              "absolute inset-0 bg-gradient-to-l transition-opacity duration-700",
               item.panel,
               itemIndex === index ? "opacity-100" : "opacity-0",
             )}
@@ -148,58 +130,38 @@ export function SplashSlider() {
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-white/25 to-transparent" />
 
         <div
-          key={`sheen-${index}`}
-          aria-hidden
-          className="slider-sheen pointer-events-none absolute inset-0 z-30"
-        />
-
-        <div
           aria-hidden
           className={cn(
-            "pointer-events-none absolute -bottom-24 -start-16 h-56 w-56 rounded-full blur-3xl transition-colors duration-700",
+            "pointer-events-none absolute -bottom-24 -start-16 h-56 w-56 rounded-full opacity-70 blur-2xl transition-colors duration-700",
             slide.glow,
           )}
-          style={{ transform: "translateZ(120px)" }}
-        >
-          <span className="slider-float block h-full w-full rounded-full bg-inherit" />
-        </div>
+        />
         <div
           aria-hidden
           className={cn(
-            "pointer-events-none absolute -top-16 end-10 h-32 w-32 rounded-full blur-2xl",
+            "pointer-events-none absolute -top-16 end-10 h-32 w-32 rounded-full opacity-70 blur-xl transition-colors duration-700",
             slide.blob,
           )}
-          style={{ transform: "translateZ(180px)" }}
-        >
-          <span className="slider-float block h-full w-full rounded-full bg-inherit [animation-delay:-3s]" />
-        </div>
+        />
 
-        <div
-          className="relative h-[31rem] sm:h-[27rem] lg:h-[26rem]"
-          style={{ perspective: "1500px", perspectiveOrigin: "50% 40%" }}
-        >
+        <div className="relative h-[31rem] sm:h-[27rem] lg:h-[26rem]">
           {SLIDES.map((item, itemIndex) => {
             const isActive = itemIndex === index;
             return (
               <article
                 key={item.key}
                 aria-hidden={!isActive}
-                className="absolute inset-0 grid items-center gap-8 p-6 duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:p-12"
+                className="absolute inset-0 grid items-center gap-8 p-6 transition-[opacity,transform] duration-500 ease-out sm:p-10 lg:grid-cols-[1.1fr_0.9fr] lg:p-12"
                 style={{
                   opacity: isActive ? 1 : 0,
                   transform: isActive
-                    ? "translateZ(0px) rotateX(0deg) rotateY(0deg) scale(1)"
-                    : `translateZ(-220px) rotateY(${itemIndex < index ? 26 : -26}deg) scale(0.82)`,
-                  transformStyle: "preserve-3d",
+                    ? "translateX(0) scale(1)"
+                    : `translateX(${itemIndex < index ? "28px" : "-28px"}) scale(0.985)`,
                   pointerEvents: isActive ? "auto" : "none",
                   zIndex: isActive ? 20 : 10,
-                  transitionProperty: "transform, opacity",
                 }}
               >
-                <div
-                  className="slider-rise"
-                  style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
-                >
+                <div className="slider-rise">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-stone-500 backdrop-blur">
                     <span className={cn("h-1.5 w-1.5 rounded-full", item.dot)} />
                     {item.eyebrow}
@@ -229,32 +191,25 @@ export function SplashSlider() {
                   </div>
                 </div>
 
-                <div
-                  className="relative mx-auto hidden h-52 w-52 items-center justify-center sm:flex lg:h-64 lg:w-64"
-                  style={{ transformStyle: "preserve-3d" }}
-                >
+                <div className="relative mx-auto hidden h-52 w-52 items-center justify-center sm:flex lg:h-64 lg:w-64">
                   <span
                     aria-hidden
                     className="pointer-events-none absolute inset-0 flex items-center justify-center"
-                    style={{ transform: "translateZ(-70px)" }}
                   >
                     <span className="font-display text-[11rem] leading-none text-white/[0.05]">
                       {toFa(itemIndex + 1)}
                     </span>
                   </span>
 
-                  <div
-                    className="relative flex h-full w-full items-center justify-center"
-                    style={{ transform: "translateZ(90px)", transformStyle: "preserve-3d" }}
-                  >
+                  <div className="relative flex h-full w-full items-center justify-center rounded-full">
                     <span
                       className={cn(
-                        "slider-orbit absolute inset-0 rounded-full bg-gradient-to-br opacity-85 blur-[2px]",
+                        "slider-orbit absolute inset-0 rounded-full bg-gradient-to-br opacity-85",
                         item.ring,
                       )}
                     />
                     <span className="absolute inset-[7px] rounded-full bg-ink-950" />
-                    <span className="slider-orbit-reverse absolute inset-[-16px] rounded-full border border-dashed border-white/15" />
+                    <span className="absolute inset-[-16px] rounded-full border border-dashed border-white/15" />
                     <span className="relative h-[8.5rem] w-[8.5rem] overflow-hidden rounded-full ring-1 ring-white/20 lg:h-40 lg:w-40">
                       <Image
                         src="/rollchi-logo.webp"
