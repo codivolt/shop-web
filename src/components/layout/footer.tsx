@@ -91,7 +91,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               <li dir="ltr" className="text-right">{SITE.phone}</li>
               <li>{SITE.email}</li>
-              <li>{SITE.address}</li>
+              <li>آدرس: {SITE.address}</li>
             </ul>
           </div>
         </div>

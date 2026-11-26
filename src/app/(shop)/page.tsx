@@ -14,7 +14,7 @@ import { formatNumber, formatPrice } from "@/lib/format";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `${SITE.name} | ${SITE.tagline}`,
+  title: { absolute: SITE.tagline },
   description: SITE.description,
   alternates: { canonical: "/" },
 };
@@ -148,7 +148,7 @@ export default async function HomePage() {
             </span>
             <h1 className="mt-6 max-w-xl font-display text-4xl sm:text-5xl leading-[1.45] sm:leading-[1.35]">
               رولچی،
-              <span className="block text-splash">رول کن، مال خودت باش</span>
+              <span className="block text-splash">سیگار خودتو رول کن</span>
             </h1>
             <p className="mt-5 max-w-lg text-stone-400 text-sm sm:text-base leading-7 sm:leading-8">
               توتون دست‌چین، کاغذ و فیلتر رول و لوازم رول‌کردن؛ همه‌چیز برای اینکه

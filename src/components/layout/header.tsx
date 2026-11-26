@@ -746,13 +746,9 @@ export function Header() {
   return (
     <header className="top-0 z-40 sticky">
       <div className="bg-ink-950 border-white/10 border-b text-stone-400">
-        <div className="flex justify-between items-center gap-4 py-2 text-[11px] container-page">
-          <p className="flex items-center gap-2">
-            <span className="bg-splash-yellow rounded-full w-1.5 h-1.5" />
-            پیک رولچی · ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان
-          </p>
-          <a href="tel:+982191000000" className="hidden sm:block hover:text-white transition">
-            پشتیبانی: {SITE.phone}
+        <div className="flex justify-center items-center gap-4 py-2 text-[11px] container-page">
+          <a href="tel:+989013247898" className="hover:text-white transition">
+            پشتیبانی: <span dir="ltr">{SITE.phone}</span>
           </a>
         </div>
       </div>
