@@ -3,38 +3,76 @@
 @theme {
   --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
+  --font-display: var(--font-lalezar), var(--font-vazirmatn), ui-sans-serif,
+    system-ui, sans-serif;
 
-  --color-brand-50: #fff9ed;
-  --color-brand-100: #fef0d5;
-  --color-brand-200: #fcdc9e;
-  --color-brand-300: #f9c266;
-  --color-brand-400: #f6a33b;
-  --color-brand-500: #f08519;
-  --color-brand-600: #d96a0e;
-  --color-brand-700: #b45309;
-  --color-brand-800: #91400e;
-  --color-brand-900: #76360f;
-  --color-brand-950: #421b05;
+  /* سطوح تیره */
+  --color-ink-950: #06060a;
+  --color-ink-900: #09090f;
+  --color-ink-800: #101018;
+  --color-ink-700: #16161f;
+  --color-ink-600: #1d1d28;
 
+  /* مقیاس stone معکوس شده تا کل سایت روی پس‌زمینه مشکی خوانا باشد */
+  --color-stone-50: #08080d;
+  --color-stone-100: #0e0e15;
+  --color-stone-200: #1b1b25;
+  --color-stone-300: #2a2a37;
+  --color-stone-400: #7c7c8c;
+  --color-stone-500: #9696a5;
+  --color-stone-600: #b6b6c4;
+  --color-stone-700: #d3d3df;
+  --color-stone-800: #ededf3;
+  --color-stone-900: #fafaff;
+  --color-stone-950: #ffffff;
+
+  /* رنگ اصلی برند: پاشش سرخابی */
+  --color-brand-50: #2b0b18;
+  --color-brand-100: #3f0f22;
+  --color-brand-200: #5d1330;
+  --color-brand-300: #ff94b6;
+  --color-brand-400: #ff4f88;
+  --color-brand-500: #ff2d6f;
+  --color-brand-600: #f61e63;
+  --color-brand-700: #e8105a;
+  --color-brand-800: #ff7aa5;
+  --color-brand-900: #ffb3ca;
+  --color-brand-950: #ffdce8;
+
+  /* پاشش‌های رنگی لوگو */
+  --color-splash-cyan: #22d3ee;
+  --color-splash-yellow: #ffd43b;
+  --color-splash-lime: #b6f24a;
+  --color-splash-violet: #a855f7;
+  --color-splash-orange: #ff8a3d;
+  --color-splash-red: #ff3b30;
+  --color-splash-pink: #ff2d6f;
+  --color-cream: #f7f0df;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    color-scheme: dark;
   }
 
   body {
-    background-color: var(--color-stone-50);
-    color: var(--color-stone-800);
+    background-color: var(--color-ink-950);
+    background-image:
+      radial-gradient(58rem 34rem at 88% -10%, rgb(255 45 111 / 0.16), transparent 68%),
+      radial-gradient(46rem 30rem at -8% 6%, rgb(34 211 238 / 0.12), transparent 70%),
+      radial-gradient(52rem 32rem at 50% 112%, rgb(168 85 247 / 0.14), transparent 70%);
+    background-attachment: fixed;
+    color: var(--color-stone-600);
     font-family: var(--font-sans);
     font-feature-settings: "ss01";
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background-color: var(--color-brand-200);
-    color: var(--color-brand-950);
+    background-color: var(--color-brand-500);
+    color: var(--color-ink-950);
   }
 
   * {
@@ -89,16 +127,68 @@
 
   .card-surface {
     border-radius: 1.5rem;
-    border: 1px solid color-mix(in oklab, var(--color-stone-200) 80%, transparent);
-    background-color: #fff;
-    box-shadow: 0 1px 2px rgb(28 25 23 / 0.04);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background-color: var(--color-ink-800);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
   }
 
   .hero-grid {
     background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
     background-size: 44px 44px;
+  }
+
+  /* پاشش رنگ‌های لوگو روی سطوح تیره */
+  .splash-field {
+    background-image:
+      radial-gradient(38% 46% at 86% 2%, rgb(255 45 111 / 0.32), transparent 66%),
+      radial-gradient(32% 40% at 68% 96%, rgb(255 138 61 / 0.18), transparent 68%),
+      radial-gradient(34% 44% at 10% 4%, rgb(34 211 238 / 0.2), transparent 70%),
+      radial-gradient(30% 38% at 4% 82%, rgb(168 85 247 / 0.24), transparent 70%),
+      radial-gradient(24% 30% at 44% 40%, rgb(255 212 59 / 0.1), transparent 72%);
+  }
+
+  .text-splash {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-splash-yellow) 0%,
+      var(--color-splash-orange) 22%,
+      var(--color-splash-pink) 46%,
+      var(--color-splash-violet) 70%,
+      var(--color-splash-cyan) 96%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .splash-rule {
+    height: 3px;
+    border-radius: 999px;
+    background-image: linear-gradient(
+      90deg,
+      var(--color-splash-cyan),
+      var(--color-splash-lime) 18%,
+      var(--color-splash-yellow) 38%,
+      var(--color-splash-orange) 56%,
+      var(--color-splash-pink) 74%,
+      var(--color-splash-violet) 100%
+    );
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-synthesis-weight: none;
+    letter-spacing: 0;
+  }
+}
+
+@layer utilities {
+  /* سطح کارت‌ها: کلاس‌های bg-white سایت روی تم تیره نگاشت می‌شوند */
+  html .bg-white {
+    background-color: var(--color-ink-800);
   }
 }
 
@@ -247,5 +337,196 @@
       animation-duration: 0.01ms;
       animation-delay: 0s;
     }
+  }
+}
+
+/* اسلایدر برند: پاشش، مدار چرخان و نوار پیشرفت */
+@keyframes slider-sweep {
+  0% {
+    transform: translateX(-70%) skewX(-16deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(340%) skewX(-16deg);
+    opacity: 0;
+  }
+}
+
+@keyframes slider-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slider-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slider-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-12px, -16px, 0) scale(1.1);
+  }
+}
+
+@keyframes slider-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@layer components {
+  .slider-sweep {
+    animation: slider-sweep 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .slider-rise > * {
+    animation: slider-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .slider-rise > :nth-child(2) {
+    animation-delay: 0.06s;
+  }
+
+  .slider-rise > :nth-child(3) {
+    animation-delay: 0.12s;
+  }
+
+  .slider-rise > :nth-child(4) {
+    animation-delay: 0.18s;
+  }
+
+  .slider-orbit {
+    animation: slider-orbit 22s linear infinite;
+  }
+
+  .slider-float {
+    animation: slider-float 9s ease-in-out infinite;
+  }
+
+  .slider-progress {
+    transform-origin: right center;
+    animation: slider-progress 6s linear both;
+  }
+
+  .brand-strip-orbit {
+    animation: slider-orbit 26s linear infinite;
+  }
+
+  .slider-orbit-reverse {
+    animation: slider-orbit 34s linear infinite reverse;
+  }
+
+  .slider-sheen {
+    background-image: linear-gradient(
+      100deg,
+      transparent 28%,
+      rgb(255 255 255 / 0.16) 46%,
+      rgb(255 212 59 / 0.1) 54%,
+      transparent 70%
+    );
+    background-size: 260% 100%;
+    animation: slider-sheen 2.2s ease-out both;
+  }
+
+  /* پاشش رنگ لوگو در نوار برند */
+  .splash-cluster {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    width: 2.6rem;
+    height: 1.9rem;
+    filter: drop-shadow(0 0 8px rgb(255 255 255 / 0.08));
+  }
+
+  .splash-cluster > span {
+    position: absolute;
+    display: block;
+  }
+
+  .splash-cluster > :nth-child(1) {
+    left: 0;
+    top: 0.15rem;
+    width: 1.1rem;
+    height: 0.95rem;
+    border-radius: 66% 34% 48% 52% / 58% 44% 56% 42%;
+    transform: rotate(-18deg);
+  }
+
+  .splash-cluster > :nth-child(2) {
+    left: 0.85rem;
+    top: 0.62rem;
+    width: 0.8rem;
+    height: 0.7rem;
+    border-radius: 40% 60% 35% 65% / 55% 42% 58% 45%;
+    transform: rotate(16deg);
+  }
+
+  .splash-cluster > :nth-child(3) {
+    left: 1.55rem;
+    top: 0.05rem;
+    width: 1rem;
+    height: 0.85rem;
+    border-radius: 52% 48% 66% 34% / 46% 62% 38% 54%;
+    transform: rotate(-8deg);
+  }
+
+  .splash-cluster > :nth-child(4) {
+    left: 2rem;
+    top: 1.05rem;
+    width: 0.5rem;
+    height: 0.45rem;
+    border-radius: 50%;
+  }
+
+  .splash-cluster > :nth-child(5) {
+    left: 0.5rem;
+    top: 1.3rem;
+    width: 0.34rem;
+    height: 0.3rem;
+    border-radius: 50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slider-sweep,
+    .slider-rise > *,
+    .slider-orbit,
+    .slider-orbit-reverse,
+    .slider-float,
+    .slider-progress,
+    .slider-sheen,
+    .brand-strip-orbit {
+      animation: none;
+    }
+  }
+}
+
+@keyframes slider-sheen {
+  0% {
+    background-position: 130% 0;
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    background-position: -70% 0;
+    opacity: 0;
   }
 }

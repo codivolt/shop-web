@@ -14,15 +14,15 @@ type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-brand-700 text-white shadow-lg shadow-brand-700/20 hover:bg-brand-800 hover:shadow-brand-800/25",
+    "bg-gradient-to-l from-brand-500 via-brand-400 to-splash-orange text-ink-950 shadow-lg shadow-brand-500/25 hover:shadow-xl hover:shadow-brand-500/35 hover:brightness-110",
   secondary:
-    "bg-brand-50 text-brand-800 ring-1 ring-inset ring-brand-200 hover:bg-brand-100",
+    "bg-brand-50 text-brand-300 ring-1 ring-inset ring-brand-200 hover:bg-brand-100 hover:text-brand-200",
   outline:
-    "border border-stone-200 bg-white text-stone-700 hover:border-stone-300 hover:bg-stone-50",
-  ghost: "text-stone-600 hover:bg-stone-100 hover:text-stone-900",
+    "border border-white/12 bg-white/5 text-stone-700 hover:border-white/25 hover:bg-white/10 hover:text-white",
+  ghost: "text-stone-500 hover:bg-white/5 hover:text-white",
   danger:
-    "bg-rose-600 text-white shadow-lg shadow-rose-600/20 hover:bg-rose-700",
-  dark: "bg-stone-900 text-white hover:bg-stone-800",
+    "bg-rose-600 text-white shadow-lg shadow-rose-900/40 hover:bg-rose-500",
+  dark: "bg-ink-700 text-white ring-1 ring-inset ring-white/10 hover:bg-ink-600",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -48,7 +48,7 @@ export function buttonStyles({
   className?: string;
 } = {}): string {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 active:scale-[0.98]",
+    "inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-200 outline-none select-none focus-visible:ring-2 focus-visible:ring-brand-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
     variants[variant],
     sizes[size],
     className,

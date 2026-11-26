@@ -136,7 +136,9 @@ function OrderDetailContent() {
     }
   };
 
-  const isOrderFinal = data ? data.status === "cancelled" || data.status === "failed" : false;
+  const isOrderFinal = data
+    ? data.status === "cancelled" || data.status === "failed"
+    : false;
 
   if (isLoading) {
     return (
@@ -154,7 +156,9 @@ function OrderDetailContent() {
         <EmptyState
           title="سفارش یافت نشد"
           description={
-            order.isError ? apiErrorMessage(order.error) : "این سفارش در دسترس نیست."
+            order.isError
+              ? apiErrorMessage(order.error)
+              : "این سفارش در دسترس نیست."
           }
           actionLabel="بازگشت به سفارش‌ها"
           actionHref="/orders"
@@ -163,7 +167,9 @@ function OrderDetailContent() {
     );
   }
 
-  const currentStep = PROGRESS_STEPS.findIndex((step) => step.status === data.status);
+  const currentStep = PROGRESS_STEPS.findIndex(
+    (step) => step.status === data.status,
+  );
 
   return (
     <>
@@ -188,32 +194,51 @@ function OrderDetailContent() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <StatusBadge label={status!.label} className={cn(status!.className, "shadow-sm")} />
-            <StatusBadge label={payment!.label} className={cn(payment!.className, "shadow-sm")} />
+            <StatusBadge
+              label={status!.label}
+              className={cn(status!.className, "shadow-sm")}
+            />
+            <StatusBadge
+              label={payment!.label}
+              className={cn(payment!.className, "shadow-sm")}
+            />
           </div>
         </div>
 
         {data.status === "failed" && (
-          <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+          <div className="mt-6 overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white p-6 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-rose-900">سفارش منقضی شده</h3>
-                <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
-                  مهلت بارگذاری فیش پرداخت به پایان رسید و سفارش شما به دلیل عدم پرداخت منقضی شد.
+                <h3 className="text-sm font-bold text-rose-900">
+                  سفارش منقضی شده
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-rose-700/90">
+                  مهلت بارگذاری فیش پرداخت به پایان رسید و سفارش شما به دلیل عدم
+                  پرداخت منقضی شد.
                 </p>
               </div>
             </div>
-            <div className="bg-rose-50/50 border-t border-rose-100 p-4 sm:p-5">
+            <div className="border-t border-rose-100 bg-rose-50/50 p-4 sm:p-5">
               <Button
                 onClick={() => {
                   window.location.href = "/cart";
                 }}
-                className="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+                className="w-full bg-rose-900 text-white shadow-sm hover:bg-rose-800 sm:w-auto"
               >
                 ثبت سفارش جدید
               </Button>
@@ -225,13 +250,25 @@ function OrderDetailContent() {
           <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4 sm:flex-row sm:items-center">
             <div className="flex flex-1 items-start gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </span>
               <div className="min-w-0 flex-1">
                 <h3 className="text-[13px] font-bold text-amber-900">
-                  {isReceiptRejected ? "بارگذاری فیش پرداخت جدید" : "بارگذاری فیش پرداخت"}
+                  {isReceiptRejected
+                    ? "بارگذاری فیش پرداخت جدید"
+                    : "بارگذاری فیش پرداخت"}
                 </h3>
                 <p className="mt-0.5 text-xs leading-5 text-amber-700/90">
                   {isReceiptRejected
@@ -266,7 +303,7 @@ function OrderDetailContent() {
                   size="sm"
                   onClick={handleUploadReceipt}
                   disabled={uploadReceipt.isPending}
-                  className="bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+                  className="bg-amber-900 text-white shadow-sm hover:bg-amber-800"
                 >
                   {uploadReceipt.isPending ? "در حال ارسال..." : "ارسال فیش"}
                 </Button>
@@ -276,7 +313,7 @@ function OrderDetailContent() {
                 size="sm"
                 onClick={() => receiptInputRef.current?.click()}
                 disabled={uploadReceipt.isPending}
-                className="self-start sm:self-auto bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+                className="self-start bg-amber-900 text-white shadow-sm hover:bg-amber-800 sm:self-auto"
               >
                 {uploadReceipt.isPending ? "در حال بارگذاری..." : "انتخاب فیش"}
               </Button>
@@ -287,12 +324,24 @@ function OrderDetailContent() {
         {isReceiptApproved && (
           <div className="mt-6 flex items-center gap-3 rounded-2xl border border-emerald-200/70 bg-emerald-50/60 p-4">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[13px] font-bold text-emerald-900">فیش پرداخت تایید شد</h3>
+              <h3 className="text-[13px] font-bold text-emerald-900">
+                فیش پرداخت تایید شد
+              </h3>
               <p className="mt-0.5 text-xs leading-5 text-emerald-700/90">
                 فیش پرداخت شما توسط ادمین تایید شد.
               </p>
@@ -300,7 +349,7 @@ function OrderDetailContent() {
             <Button
               size="sm"
               onClick={() => setImageViewerOpen(true)}
-              className="shrink-0 bg-emerald-900 hover:bg-emerald-800 text-white shadow-sm"
+              className="shrink-0 bg-emerald-900 text-white shadow-sm hover:bg-emerald-800"
             >
               نمایش فیش
             </Button>
@@ -308,29 +357,41 @@ function OrderDetailContent() {
         )}
 
         {isReceiptRejected && (
-          <div className="mt-6 rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white shadow-sm overflow-hidden p-6">
+          <div className="mt-6 overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white p-6 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="flex shrink-0 items-center justify-center rounded-xl bg-rose-100 p-3 text-rose-600">
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-bold text-rose-900">فیش پرداخت رد شد</h3>
-                <p className="mt-1 text-sm text-rose-700/90 leading-relaxed">
+                <h3 className="text-sm font-bold text-rose-900">
+                  فیش پرداخت رد شد
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-rose-700/90">
                   فیش پرداخت شما توسط ادمین رد شد.
                 </p>
-                 {latestHistory?.rejectionReason || data?.rejectionReason ? (
-                   <div className="mt-2 text-sm text-rose-700/90 italic">
-                     «{latestHistory?.rejectionReason || data?.rejectionReason}»
-                   </div>
-                 ) : null}
+                {(latestHistory?.rejectionReason || data?.rejectionReason) && (
+                  <div className="mt-2 text-sm italic text-rose-700/90">
+                    «{latestHistory?.rejectionReason || data?.rejectionReason}»
+                  </div>
+                )}
               </div>
             </div>
-            <div className="bg-rose-50/50 border-t border-rose-100 p-4 sm:p-5">
+            <div className="border-t border-rose-100 bg-rose-50/50 p-4 sm:p-5">
               <Button
                 onClick={() => setImageViewerOpen(true)}
-                className="bg-rose-900 hover:bg-rose-800 text-white shadow-sm"
+                className="bg-rose-900 text-white shadow-sm hover:bg-rose-800"
               >
                 نمایش فیش
               </Button>
@@ -341,12 +402,24 @@ function OrderDetailContent() {
         {isReceiptPending && (
           <div className="mt-6 flex items-center gap-3 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-4">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="text-[13px] font-bold text-amber-900">در حال بررسی</h3>
+              <h3 className="text-[13px] font-bold text-amber-900">
+                در حال بررسی
+              </h3>
               <p className="mt-0.5 text-xs leading-5 text-amber-700/90">
                 فیش پرداخت شما بارگذاری شده و در انتظار تایید ادمین است.
               </p>
@@ -354,7 +427,7 @@ function OrderDetailContent() {
             <Button
               size="sm"
               onClick={() => setImageViewerOpen(true)}
-              className="shrink-0 bg-amber-900 hover:bg-amber-800 text-white shadow-sm"
+              className="shrink-0 bg-amber-900 text-white shadow-sm hover:bg-amber-800"
             >
               نمایش فیش
             </Button>
@@ -363,17 +436,23 @@ function OrderDetailContent() {
 
         {data.receiptHistory && data.receiptHistory.length > 1 && (
           <div className="mt-6 rounded-3xl border border-stone-100 bg-white p-6 shadow-sm">
-            <h3 className="text-sm font-bold text-stone-900 mb-4">تاریخچه فیش‌ها</h3>
+            <h3 className="mb-4 text-sm font-bold text-stone-900">
+              تاریخچه فیش‌ها
+            </h3>
             <div className="space-y-3">
               {data.receiptHistory.map((h) => (
                 <div
                   key={h.id}
-                  className="flex items-start gap-3 p-3 rounded-xl border border-stone-200/50 bg-stone-50/50"
+                  className="flex items-start gap-3 rounded-xl border border-stone-200/50 bg-stone-50/50 p-3"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600 text-xs font-bold">
-                    {h.status === "approved" ? "✓" : h.status === "rejected" ? "✗" : "⟳"}
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-xs font-bold text-stone-600">
+                    {h.status === "approved"
+                      ? "✓"
+                      : h.status === "rejected"
+                        ? "✗"
+                        : "⟳"}
                   </div>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="text-sm text-stone-700">
                       {h.status === "approved"
                         ? "تایید شده"
@@ -382,7 +461,7 @@ function OrderDetailContent() {
                           : "در انتظار بررسی"}
                     </p>
                     {h.status === "rejected" && h.rejectionReason && (
-                      <p className="mt-0.5 text-xs text-rose-600 italic">
+                      <p className="mt-0.5 text-xs italic text-rose-600">
                         «{h.rejectionReason}»
                       </p>
                     )}
@@ -451,7 +530,9 @@ function OrderDetailContent() {
               <section className="overflow-hidden rounded-3xl border border-stone-200/70 bg-white shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)]">
                 <div className="flex items-center gap-2.5 border-b border-stone-100 px-6 py-5">
                   <span className="h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600" />
-                  <h2 className="text-base font-black text-stone-900">اقلام سفارش</h2>
+                  <h2 className="text-base font-black text-stone-900">
+                    اقلام سفارش
+                  </h2>
                   <span className="mr-auto rounded-full bg-stone-100 px-2.5 py-0.5 text-[11px] font-bold text-stone-500">
                     {data.items.length.toLocaleString("fa-IR")} قلم
                   </span>
@@ -494,7 +575,9 @@ function OrderDetailContent() {
               <aside className="overflow-hidden rounded-3xl border border-stone-200/70 bg-white shadow-[0_1px_2px_rgba(28,25,23,0.04),0_16px_40px_-16px_rgba(28,25,23,0.10)]">
                 <div className="flex items-center gap-2.5 border-b border-stone-100 px-6 py-5">
                   <span className="h-5 w-1 rounded-full bg-gradient-to-b from-brand-400 to-brand-600" />
-                  <h2 className="text-base font-black text-stone-900">خلاصه پرداخت</h2>
+                  <h2 className="text-base font-black text-stone-900">
+                    خلاصه پرداخت
+                  </h2>
                 </div>
                 <div className="p-6">
                   <dl className="space-y-3 text-sm">
@@ -517,7 +600,8 @@ function OrderDetailContent() {
                   </dl>
 
                   <p className="mt-5 rounded-xl bg-stone-50 px-4 py-3 text-[11px] leading-5 text-stone-500 ring-1 ring-inset ring-stone-100">
-                    در صورت نیاز به تغییر یا لغو سفارش، از طریق پشتیبانی اقدام کنید.
+                    در صورت نیاز به تغییر یا لغو سفارش، از طریق پشتیبانی اقدام
+                    کنید.
                   </p>
                 </div>
               </aside>

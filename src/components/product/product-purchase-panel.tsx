@@ -43,7 +43,7 @@ export function ProductPurchasePanel({ product }: { product: CartLineProduct }) 
             strokeLinejoin="round"
           />
         </svg>
-        پرداخت امن و ضمانت بازگشت کالا
+        اصالت توتون و ضمانت بازگشت کالا
       </p>
     </div>
   );

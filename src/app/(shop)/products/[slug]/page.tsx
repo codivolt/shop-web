@@ -279,7 +279,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {related.length > 0 ? (
         <PageLayout
           title="محصولات مرتبط"
-          eyebrow="پیشنهاد ما"
+          eyebrow="پیشنهاد رولچی"
           actionLabel="مشاهده همه"
           actionHref={product.category ? `/products?category=${product.category.slug}` : "/products"}
           className="pb-10"

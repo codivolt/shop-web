@@ -9,7 +9,7 @@ import {
 import { cn } from "@/lib/cn";
 
 const fieldBase =
-  "w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-stone-900 shadow-sm transition placeholder:text-stone-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 focus:outline-none disabled:bg-stone-100 disabled:text-stone-500 aria-invalid:border-rose-400 aria-invalid:focus:border-rose-500 aria-invalid:focus:ring-rose-500/10";
+  "w-full rounded-xl border border-white/10 bg-ink-900/70 px-3.5 py-2.5 text-sm text-stone-900 shadow-sm shadow-black/30 transition placeholder:text-stone-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-500/15 focus:outline-none disabled:bg-ink-900 disabled:text-stone-500 aria-invalid:border-rose-400 aria-invalid:focus:border-rose-500 aria-invalid:focus:ring-rose-500/15";
 
 interface FieldWrapperProps {
   label?: string;
@@ -43,7 +43,7 @@ function FieldWrapper({
       ) : null}
       {children}
       {error ? (
-        <p className="text-xs font-medium text-rose-600">{error}</p>
+        <p className="text-xs font-medium text-rose-300">{error}</p>
       ) : hint ? (
         <p className="text-xs text-stone-500">{hint}</p>
       ) : null}
@@ -155,7 +155,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         ref={ref}
         id={id}
         aria-invalid={error ? true : undefined}
-        className={cn(fieldBase, "appearance-none bg-white pe-9", className)}
+        className={cn(fieldBase, "appearance-none bg-ink-900/70 pe-9", className)}
         {...props}
       >
         {placeholder ? <option value="">{placeholder}</option> : null}
@@ -187,7 +187,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         id={id}
         type="checkbox"
         className={cn(
-          "h-4 w-4 rounded border-stone-300 text-brand-700 accent-brand-700",
+          "h-4 w-4 rounded border-white/20 accent-brand-500",
           className,
         )}
         {...props}

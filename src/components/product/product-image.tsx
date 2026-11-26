@@ -20,7 +20,7 @@ export function ProductImage({
 
   if (!normalized) {
     return (
-      <div className="flex flex-col justify-center items-center gap-3 bg-gradient-to-br from-stone-100 via-white to-brand-50 w-full h-full text-stone-300">
+      <div className="flex flex-col justify-center items-center gap-3 bg-gradient-to-br from-ink-900 via-ink-800 to-brand-500/10 w-full h-full text-stone-500">
         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
             d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z"

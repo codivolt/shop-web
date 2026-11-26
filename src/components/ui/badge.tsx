@@ -17,12 +17,12 @@ export interface BadgeProps {
 }
 
 const tones: Record<BadgeTone, string> = {
-  neutral: "bg-stone-100 text-stone-600 ring-stone-200",
-  brand: "bg-brand-50 text-brand-800 ring-brand-200",
-  success: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  warning: "bg-amber-50 text-amber-700 ring-amber-200",
-  danger: "bg-rose-50 text-rose-700 ring-rose-200",
-  info: "bg-sky-50 text-sky-700 ring-sky-200",
+  neutral: "bg-white/10 text-stone-700 ring-white/15",
+  brand: "bg-brand-500/15 text-brand-300 ring-brand-400/30",
+  success: "bg-emerald-500/15 text-emerald-300 ring-emerald-400/30",
+  warning: "bg-amber-500/15 text-amber-300 ring-amber-400/30",
+  danger: "bg-rose-500/15 text-rose-300 ring-rose-400/30",
+  info: "bg-sky-500/15 text-sky-300 ring-sky-400/30",
 };
 
 export function Badge({

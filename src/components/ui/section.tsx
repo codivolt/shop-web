@@ -27,12 +27,12 @@ export function SectionHeading({
     >
       <div className="max-w-2xl">
         {eyebrow ? (
-          <span className="mb-2 inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-800 ring-1 ring-inset ring-brand-100">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+          <span className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-brand-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-splash-yellow" />
             {eyebrow}
           </span>
         ) : null}
-        <h2 className="text-2xl font-black tracking-tight text-stone-900 sm:text-3xl">
+        <h2 className="font-display text-3xl leading-[1.4] text-white sm:text-4xl">
           {title}
         </h2>
         {description ? (
@@ -42,7 +42,7 @@ export function SectionHeading({
       {actionHref && actionLabel ? (
         <Link
           href={actionHref}
-          className="group inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-4 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-brand-200 hover:text-brand-800"
+          className="group inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-stone-500 transition hover:border-brand-400/50 hover:text-white"
         >
           {actionLabel}
           <span className="transition group-hover:-translate-x-1">←</span>
@@ -75,7 +75,7 @@ export function Breadcrumbs({
             </span>
           ) : null}
           {item.href ? (
-            <Link href={item.href} className="transition hover:text-brand-800">
+            <Link href={item.href} className="transition hover:text-brand-300">
               {item.label}
             </Link>
           ) : (
@@ -97,7 +97,7 @@ export function InfoRow({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-stone-100 py-3 last:border-none">
+    <div className="flex items-center justify-between gap-4 border-b border-white/10 py-3 last:border-none">
       <span className="text-sm text-stone-500">{label}</span>
       <span className="text-sm font-bold text-stone-800">
         {value ?? children}

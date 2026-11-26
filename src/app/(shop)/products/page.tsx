@@ -46,8 +46,8 @@ export default function ProductsPage({
 }) {
   return (
     <PageLayout
-      title="فروشگاه"
-      description="لیست کامل سیگار، توتون، پیپ و لوازم جانبی با امکان جستجو، فیلتر برند و بازه قیمتی."
+      title="فروشگاه رولچی"
+      description="توتون دست‌چین، کاغذ و فیلتر رول و لوازم جانبی؛ با امکان جستجو، فیلتر برند و بازه قیمتی."
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "فروشگاه" }]}
     >
       <Suspense fallback={<CatalogSkeleton />}>

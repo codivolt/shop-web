@@ -109,10 +109,10 @@ function AccountView() {
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-stone-900 sm:text-3xl">
-            حساب کاربری
+            حساب کاربری رولچی
           </h1>
           <p className="mt-1 text-sm text-stone-500">
-            اطلاعات حساب و آدرس‌های خود را مدیریت کنید.
+            اطلاعات حساب، آدرس‌ها و سفارش‌های رولچی‌ات را همین‌جا مدیریت کن.
           </p>
         </div>
         <Button
@@ -234,7 +234,7 @@ function AccountView() {
                       {address.title ?? "آدرس"}
                     </p>
                     {address.isDefault ? (
-                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+                      <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
                         پیش‌فرض
                       </span>
                     ) : null}
@@ -261,7 +261,7 @@ function AccountView() {
                       type="button"
                       onClick={() => handleDelete(address.id)}
                       disabled={deleteAddress.isPending}
-                      className="text-[11px] font-semibold text-rose-600 hover:underline disabled:opacity-50"
+                      className="text-[11px] font-semibold text-rose-300 hover:underline disabled:opacity-50"
                     >
                       حذف
                     </button>
@@ -345,7 +345,7 @@ function AccountOrders() {
           <Skeleton className="h-16 w-full rounded-2xl" />
         </div>
       ) : orders.isError ? (
-        <p className="mt-5 rounded-xl bg-rose-50 px-4 py-3 text-xs text-rose-600">
+        <p className="mt-5 rounded-xl bg-rose-500/10 px-4 py-3 text-xs text-rose-300">
           {apiErrorMessage(orders.error)}
         </p>
       ) : list.length === 0 ? (
@@ -422,7 +422,7 @@ function ActiveOrderCard({ order }: { order: Order }) {
     .join("، ");
 
   return (
-    <div className="mt-5 rounded-2xl border border-brand-200 bg-gradient-to-l from-brand-50/80 via-white to-white p-5">
+    <div className="mt-5 rounded-2xl border border-brand-500/30 bg-gradient-to-l from-brand-500/15 via-ink-800 to-ink-800 p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="flex items-center gap-2 text-xs font-black text-brand-800">

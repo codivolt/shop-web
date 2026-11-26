@@ -10,10 +10,10 @@ export function ProductCard({ product }: { product: Product }) {
   const lowStock = product.stock > 0 && product.stock <= 5;
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-stone-900/5">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-800 shadow-sm shadow-black/40 transition duration-300 hover:-translate-y-1 hover:border-brand-400/40 hover:shadow-xl hover:shadow-black/60">
       <Link
         href={`/products/${product.slug}`}
-        className="relative block aspect-square overflow-hidden bg-stone-50"
+        className="relative block aspect-square overflow-hidden bg-ink-900"
       >
         <ProductImage
           src={product.imageUrl}
@@ -23,7 +23,7 @@ export function ProductCard({ product }: { product: Product }) {
         />
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
           {product.category ? (
-            <Badge tone="neutral" className="bg-white/90 backdrop-blur">
+            <Badge tone="neutral" className="bg-black/60 backdrop-blur">
               {product.category.name}
             </Badge>
           ) : (
@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="min-h-11">
           <Link
             href={`/products/${product.slug}`}
-            className="line-clamp-2 text-sm font-bold leading-6 text-stone-800 transition hover:text-brand-800"
+            className="line-clamp-2 text-sm font-bold leading-6 text-stone-800 transition hover:text-brand-300"
           >
             {product.name}
           </Link>
@@ -53,14 +53,14 @@ export function ProductCard({ product }: { product: Product }) {
         <div className="mt-auto flex items-end justify-between gap-2">
           <div>
             <span className="text-[11px] text-stone-400">قیمت</span>
-            <p className="text-base font-black text-stone-900">
+            <p className="text-base font-black text-white">
               {formatPrice(product.price)}
             </p>
           </div>
           <Link
             href={`/products/${product.slug}`}
             aria-label={`مشاهده ${product.name}`}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-stone-500 transition hover:bg-brand-700 hover:text-white"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-stone-400 transition hover:bg-brand-500 hover:text-ink-950"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path

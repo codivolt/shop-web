@@ -4,8 +4,8 @@ import { Suspense } from "react";
 import { LoginForm } from "./login-form";
 
 export const metadata: Metadata = {
-  title: "ورود / ثبت‌نام",
-  description: "ورود با شماره موبایل و کد یکبار مصرف به حساب کاربری فروشگاه.",
+  title: "ورود به رولچی",
+  description: "ورود با شماره موبایل و کد یکبار مصرف به حساب کاربری رولچی.",
   robots: { index: false, follow: true },
 };
 

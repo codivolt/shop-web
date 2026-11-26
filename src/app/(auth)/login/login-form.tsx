@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -29,8 +30,8 @@ import {
 } from "@/lib/validation";
 
 const BENEFITS = [
-  "پیگیری آنلاین سفارش‌ها",
-  "سبد خرید همیشه در دسترس",
+  "پیگیری آنلاین سفارش‌های رولچی",
+  "سبد خرید و توتون‌های محبوبت همیشه در دسترس",
   "ثبت سریع آدرس و خرید مجدد",
 ];
 
@@ -138,50 +139,42 @@ export function LoginForm() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-2xl shadow-stone-900/10 lg:grid-cols-[1fr_1.05fr]">
-        <aside className="relative hidden overflow-hidden bg-stone-950 p-10 text-white lg:flex lg:flex-col lg:justify-between">
-          <div className="hero-grid absolute inset-0 opacity-50" />
+        <aside className="relative hidden overflow-hidden bg-ink-900 p-10 text-white lg:flex lg:flex-col lg:justify-between">
+          <div className="hero-grid absolute inset-0 opacity-40" />
+          <div className="splash-field absolute inset-0" />
           <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-600/25 blur-3xl" />
-          <div className="absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-brand-400/10 blur-3xl" />
+          <div className="absolute -bottom-32 -right-16 h-80 w-80 rounded-full bg-splash-cyan/15 blur-3xl" />
 
           <div className="relative">
             <Link href="/" className="inline-flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path
-                    d="M12 3c2.4 2.2 4 4.4 4 7a4 4 0 0 1-8 0c0-1.3.4-2.4 1.2-3.4C8.5 8.5 8 10.2 8 12a4 4 0 0 0 8 0"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M12 21c3.9 0 7-2.9 7-6.5 0-1.2-.3-2.3-.9-3.3"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                </svg>
+              <span className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/15">
+                <Image
+                  src="/rollchi-logo.webp"
+                  alt="لوگوی رولچی"
+                  width={96}
+                  height={96}
+                  className="h-full w-full object-cover"
+                />
               </span>
               <div>
-                <p className="text-base font-black">{SITE.name}</p>
+                <p className="font-display text-lg">{SITE.name}</p>
                 <p className="text-[11px] text-stone-400">{SITE.tagline}</p>
               </div>
             </Link>
 
-            <h1 className="mt-14 text-3xl font-black leading-[1.4]">
-              خوش برگشتید،
+            <h1 className="font-display mt-14 text-4xl leading-[1.5]">
+              خوش برگشتی،
               <br />
-              <span className="text-brand-400">خرید را از همیشه ساده‌تر</span>
-              <br />
-              ادامه دهید.
+              <span className="text-splash">رولت رو ادامه بده</span>
             </h1>
             <p className="mt-5 max-w-sm text-sm leading-7 text-stone-400">
-              با شماره موبایل خود وارد شوید؛ بدون رمز عبور، در چند ثانیه. سفارش‌ها،
-              آدرس‌ها و سبد خرید همیشه همراه شما هستند.
+              با شماره موبایل নিজت وارد شو؛ بدون رمز عبور، در چند ثانیه. سفارش‌ها،
+              آدرس‌ها و سبد خریدت همیشه همراه رولچی هستند.
             </p>
 
             <ul className="mt-9 space-y-3">
               {BENEFITS.map((benefit) => (
-                <li key={benefit} className="flex items-center gap-3 text-sm text-stone-300">
+                <li key={benefit} className="flex items-center gap-3 text-sm text-stone-500">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-600/20 text-brand-300">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                       <path
@@ -207,23 +200,16 @@ export function LoginForm() {
         <div className="p-6 sm:p-10">
           <div className="mb-8 flex items-center justify-between lg:hidden">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-stone-950 text-brand-300">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path
-                    d="M12 3c2.4 2.2 4 4.4 4 7a4 4 0 0 1-8 0c0-1.3.4-2.4 1.2-3.4C8.5 8.5 8 10.2 8 12a4 4 0 0 0 8 0"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M12 21c3.9 0 7-2.9 7-6.5 0-1.2-.3-2.3-.9-3.3"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                </svg>
+              <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/15">
+                <Image
+                  src="/rollchi-logo.webp"
+                  alt="لوگوی رولچی"
+                  width={80}
+                  height={80}
+                  className="h-full w-full object-cover"
+                />
               </span>
-              <span className="text-sm font-black text-stone-900">{SITE.name}</span>
+              <span className="font-display text-lg text-white">{SITE.name}</span>
             </Link>
             <Link href="/" className="text-xs font-semibold text-stone-500">
               بازگشت به فروشگاه
@@ -231,7 +217,7 @@ export function LoginForm() {
           </div>
 
           <div className="hidden lg:block">
-            <h2 className="text-xl font-black text-stone-900">ورود / ثبت‌نام</h2>
+            <h2 className="font-display text-2xl text-white">ورود به رولچی</h2>
             <p className="mt-2 text-xs leading-6 text-stone-500">
               شماره موبایل خود را وارد کنید؛ اگر حساب نداشته باشید، به‌صورت خودکار
               ساخته می‌شود.

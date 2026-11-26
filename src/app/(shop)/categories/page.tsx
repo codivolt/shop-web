@@ -20,9 +20,9 @@ export default async function CategoriesPage() {
 
   return (
     <PageLayout
-      title="همه دسته‌بندی‌ها"
+      title="دسته‌بندی‌های رولچی"
       description="برای دیدن محصولات هر گروه، روی دسته‌بندی موردنظر کلیک کنید."
-      eyebrow="کاتالوگ"
+      eyebrow="کاتالوگ رولچی"
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "دسته‌بندی‌ها" }]}
     >
       {roots.length > 0 ? (
