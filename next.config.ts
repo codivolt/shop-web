@@ -3,8 +3,12 @@ import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  poweredByHeader: false,
+  compress: true,
   partialPrefetching: false,
   images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 86400,
     remotePatterns: [
       { protocol: "https", hostname: "**" },
       { protocol: "http", hostname: "localhost", port: "3000" },

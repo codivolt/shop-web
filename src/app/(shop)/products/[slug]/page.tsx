@@ -51,7 +51,13 @@ export async function generateMetadata({
     `خرید آنلاین ${product.name} با ضمانت اصالت کالا و ارسال سریع از ${SITE.name}.`
   ).slice(0, 160);
 
-  const image = absoluteImage(product.imageUrl);
+  const productImages = await getProductImages(product.id);
+  const imageUrls = [
+    ...(product.imageUrl ? [absoluteImage(product.imageUrl)] : []),
+    ...productImages
+      .filter((image) => image.imageUrl !== product.imageUrl)
+      .map((image) => absoluteImage(image.imageUrl)),
+  ].filter((url): url is string => Boolean(url));
 
   return {
     title: product.name,
@@ -62,13 +68,15 @@ export async function generateMetadata({
       title: product.name,
       description,
       url: `/products/${product.slug}`,
-      ...(image ? { images: [{ url: image, alt: product.name }] } : {}),
+      ...(imageUrls.length > 0
+        ? { images: imageUrls.map((url) => ({ url, alt: product.name })) }
+        : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: product.name,
       description,
-      ...(image ? { images: [image] } : {}),
+      ...(imageUrls.length > 0 ? { images: imageUrls } : {}),
     },
   };
 }
@@ -106,7 +114,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     name: product.name,
     description: product.description ?? product.name,
     sku: product.sku ?? undefined,
-    image: absoluteImage(product.imageUrl) ?? undefined,
+    image: galleryImages
+      .map((image) => absoluteImage(image.imageUrl))
+      .filter((url): url is string => Boolean(url)),
     brand: product.brand ? { "@type": "Brand", name: product.brand.name } : undefined,
     category: product.category?.name,
     url: productUrl,
