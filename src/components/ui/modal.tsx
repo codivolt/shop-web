@@ -81,7 +81,7 @@ export function Modal({
         aria-label="بستن"
         onClick={onClose}
         className={cn(
-          "absolute inset-0 bg-stone-950/55 backdrop-blur-md",
+          "absolute inset-0 bg-black/75 backdrop-blur-md",
           closing ? "modal-backdrop-out" : "modal-backdrop-in",
         )}
       />
@@ -90,7 +90,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "relative z-10 max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-3xl bg-white p-6 shadow-2xl ring-1 ring-stone-900/5 sm:max-w-lg",
+          "relative z-10 max-h-[92vh] w-full overflow-y-auto overscroll-contain rounded-3xl border border-white/10 bg-ink-800 p-6 shadow-2xl shadow-black/70 sm:max-w-lg",
           closing ? "modal-panel-out" : "modal-panel-in",
           className,
         )}

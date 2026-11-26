@@ -219,7 +219,7 @@ function CheckoutView() {
 
   return (
     <PageLayout
-      title="ثبت سفارش و پرداخت"
+      title="ثبت سفارش رولچی"
       description="روش ارسال، آدرس و روش پرداخت را بررسی کنید و سفارش را نهایی کنید."
       eyebrow="تکمیل سفارش"
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "تسویه حساب" }]}
@@ -374,7 +374,7 @@ function CheckoutView() {
                 )}
               </div>
               {appliedDiscountCode && (
-                <p className="mt-2 text-sm text-emerald-600 font-medium">
+                <p className="mt-2 text-sm text-emerald-300 font-medium">
                   ✓ کد <span className="font-mono">{appliedDiscountCode}</span> اعمال شد — تخفیف: {discountAmount.toLocaleString()} تومان
                 </p>
               )}

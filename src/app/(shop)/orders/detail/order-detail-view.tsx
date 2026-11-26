@@ -95,7 +95,7 @@ function OrderDetailContent() {
       </div>
 
       {data.status === "cancelled" ? (
-        <div className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm font-semibold text-rose-700">
+        <div className="mt-6 rounded-2xl border border-rose-400/30 bg-rose-500/10 p-4 text-sm font-semibold text-rose-300">
           این سفارش لغو شده است. در صورت پرداخت، مبلغ طی فرآیند بازگشت وجه
           واریز می‌شود.
         </div>
@@ -177,7 +177,7 @@ function OrderDetailContent() {
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-stone-500">هزینه ارسال</dt>
-              <dd className="font-semibold text-emerald-600">رایگان</dd>
+              <dd className="font-semibold text-emerald-300">رایگان</dd>
             </div>
             <div className="flex items-center justify-between border-t border-dashed border-stone-200 pt-4">
               <dt className="font-bold text-stone-700">مبلغ کل</dt>

@@ -1,13 +1,13 @@
 export const SITE = {
-  name: "فروشگاه سیگار",
-  shortName: "سیگار",
-  tagline: "انتخاب حرفه‌ای‌ها",
+  name: "رولچی",
+  shortName: "رولچی",
+  tagline: "رول کن، مال خودت باش",
   description:
-    "فروشگاه اینترنتی سیگار و لوازم جانبی؛ خرید آنلاین با ضمانت اصالت کالا، ارسال سریع به سراسر ایران و پرداخت امن.",
+    "رولچی؛ توتون و سیگار خیابونی از دل شهر. توتون دست‌چین، کاغذ و فیلتر رول، لوازم رول‌کردن و ارسال سریع به سراسر ایران.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001",
   locale: "fa_IR",
   phone: "۰۲۱-۹۱۰۰۰۰۰۰",
-  email: "support@shop.example",
+  email: "support@rollchi.example",
   address: "تهران، خیابان ولیعصر، پلاک ۱۲۰",
 } as const;
 

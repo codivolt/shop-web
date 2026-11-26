@@ -44,7 +44,7 @@ export function PageLayout({
                 <span aria-hidden className="text-stone-300">/</span>
               ) : null}
               {item.href ? (
-                <Link href={item.href} className="transition hover:text-brand-800">
+                <Link href={item.href} className="transition hover:text-brand-300">
                   {item.label}
                 </Link>
               ) : (
@@ -58,12 +58,12 @@ export function PageLayout({
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-2xl">
           {eyebrow ? (
-            <span className="mb-2 inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-bold text-brand-800 ring-1 ring-inset ring-brand-100">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+            <span className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-brand-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-splash-yellow" />
               {eyebrow}
             </span>
           ) : null}
-          <h1 className="text-2xl font-black tracking-tight text-stone-900 sm:text-3xl">
+          <h1 className="font-display text-3xl leading-[1.4] text-white sm:text-4xl">
             {title}
           </h1>
           {description ? (
@@ -108,7 +108,7 @@ export function SectionCard({
   headerAction,
 }: SectionCardProps) {
   return (
-    <section className={cn("rounded-3xl border border-stone-200/80 bg-white p-5 sm:p-6", className)}>
+    <section className={cn("rounded-3xl border border-white/10 bg-ink-800 p-5 sm:p-6", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-base font-black text-stone-900">{title}</h2>
         {headerAction}
@@ -130,7 +130,7 @@ export interface InfoCardProps {
 
 export function InfoCard({ label, value, className, trend, icon }: InfoCardProps) {
   return (
-    <div className={cn("rounded-2xl border border-stone-100 bg-white p-4", className)}>
+    <div className={cn("rounded-2xl border border-white/10 bg-ink-800 p-4", className)}>
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-stone-500">{label}</span>
         {icon && <span className="text-stone-400">{icon}</span>}
@@ -138,7 +138,7 @@ export function InfoCard({ label, value, className, trend, icon }: InfoCardProps
       <div className="mt-1 flex items-end justify-between gap-2">
         <span className="text-xl font-black text-stone-900">{value}</span>
         {trend !== "neutral" && (
-          <span className={cn("text-xs font-bold", trend === "up" ? "text-emerald-600" : "text-rose-600")}>
+          <span className={cn("text-xs font-bold", trend === "up" ? "text-emerald-300" : "text-rose-300")}>
             {trend === "up" ? "↑" : "↓"}
           </span>
         )}
@@ -162,8 +162,8 @@ export function FeatureCard({
   title,
   description,
   icon,
-  iconColor = "text-brand-700",
-  iconBg = "bg-brand-50",
+  iconColor = "text-brand-300",
+  iconBg = "bg-brand-500/15",
   className,
   actionLabel,
   actionHref,
@@ -179,7 +179,7 @@ export function FeatureCard({
         {actionHref && actionLabel && (
           <Link
             href={actionHref}
-            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-800 hover:underline"
+            className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-300 hover:underline"
           >
             {actionLabel}
             <span aria-hidden>←</span>
@@ -212,7 +212,7 @@ export function StatCard({
   className,
 }: StatCardProps) {
   return (
-    <div className={cn("rounded-2xl border border-stone-200/80 bg-white p-4 transition hover:border-brand-200 hover:shadow-sm", className)}>
+    <div className={cn("rounded-2xl border border-white/10 bg-ink-800 p-4 transition hover:border-brand-400/40 hover:shadow-sm", className)}>
       {icon && (
         <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${iconBg} ${iconColor}`}>
           {icon}

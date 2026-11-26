@@ -32,12 +32,12 @@ export function ModalSheet({
       dismissible
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-50 bg-stone-950/55 backdrop-blur-md" />
+        <Drawer.Overlay className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md" />
         <Drawer.Content
           aria-label={title}
           aria-describedby={undefined}
           className={cn(
-            "fixed inset-x-0 z-50 flex max-h-full flex-col rounded-t-[2rem] bg-white shadow-2xl ring-1 ring-stone-900/5 outline-none",
+            "fixed inset-x-0 z-50 flex max-h-full flex-col rounded-t-[2rem] border border-white/10 bg-ink-800 shadow-2xl shadow-black/70 outline-none",
             fullScreen ? "top-0 h-full rounded-none" : "bottom-0 max-h-[92vh]",
             className,
           )}

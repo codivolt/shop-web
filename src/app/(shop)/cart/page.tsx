@@ -31,8 +31,8 @@ function CartView() {
 
   return (
     <PageLayout
-      title="سبد خرید"
-      description={items.length > 0 ? `${items.length.toLocaleString("fa-IR")} نوع کالا در سبد شما` : "سبد خرید شما در انتظار اولین محصول است"}
+      title="سبد خرید رولچی"
+      description={items.length > 0 ? `${items.length.toLocaleString("fa-IR")} نوع کالا در سبد شما` : "سبد رولچی‌ات هنوز خالیه؛ از فروشگاه شروع کن"}
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "سبد خرید" }]}
       actionLabel="ادامه خرید"
       actionHref="/products"

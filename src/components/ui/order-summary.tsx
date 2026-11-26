@@ -61,14 +61,14 @@ export function OrderSummary({
             <dd className="font-bold text-stone-800">{formatPrice(subtotal)}</dd>
           </div>
           {discountAmount && discountAmount > 0 && (
-            <div className="flex items-center justify-between text-emerald-600">
+            <div className="flex items-center justify-between text-emerald-300">
               <dt className="text-stone-500">تخفیف کد</dt>
               <dd className="font-semibold">-{formatPrice(discountAmount)}</dd>
             </div>
           )}
           <div className="flex items-center justify-between">
             <dt className="text-stone-500">{deliveryLabel}</dt>
-            <dd className="font-semibold text-emerald-600">{deliveryPrice === 0 ? "رایگان" : formatPrice(deliveryPrice)}</dd>
+            <dd className="font-semibold text-emerald-300">{deliveryPrice === 0 ? "رایگان" : formatPrice(deliveryPrice)}</dd>
           </div>
           <div className="flex items-center justify-between border-t border-dashed border-stone-200 pt-4">
             <dt className="font-bold text-stone-700">مبلغ قابل پرداخت</dt>
@@ -94,7 +94,7 @@ export function OrderSummary({
 
   if (variant === "compact") {
     return (
-      <aside className={cn("rounded-3xl border border-stone-200/80 bg-white p-5 lg:sticky lg:top-28", className)}>
+      <aside className={cn("rounded-3xl border border-white/10 bg-ink-800 p-5 lg:sticky lg:top-28", className)}>
         {content}
       </aside>
     );
@@ -102,7 +102,7 @@ export function OrderSummary({
 
   if (variant === "checkout") {
     return (
-      <aside className={cn("rounded-3xl border border-stone-200/80 bg-white p-5 lg:sticky lg:top-28", className)}>
+      <aside className={cn("rounded-3xl border border-white/10 bg-ink-800 p-5 lg:sticky lg:top-28", className)}>
         {content}
         <p className="mt-4 text-center text-[11px] leading-5 text-stone-400">
           پرداخت در این نسخه با ثبت فیش و تایید توسط مدیریت انجام می‌شود.
@@ -112,7 +112,7 @@ export function OrderSummary({
   }
 
   return (
-    <div className={cn("rounded-3xl border border-stone-200/80 bg-white p-6", className)}>
+    <div className={cn("rounded-3xl border border-white/10 bg-ink-800 p-6", className)}>
       {content}
     </div>
   );
@@ -125,7 +125,7 @@ export interface OrderItemListProps {
 
 export function OrderItemList({ items, className }: OrderItemListProps) {
   return (
-    <section className={cn("rounded-3xl border border-stone-200/80 bg-white p-5", className)}>
+    <section className={cn("rounded-3xl border border-white/10 bg-ink-800 p-5", className)}>
       <h2 className="flex items-center gap-2 text-base font-black text-stone-900">
         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-xs font-black text-brand-800">
           ۴
@@ -161,7 +161,7 @@ export interface CheckoutStepProps {
 
 export function CheckoutStep({ number, title, children, className }: CheckoutStepProps) {
   return (
-    <section className={cn("rounded-3xl border border-stone-200/80 bg-white p-5", className)}>
+    <section className={cn("rounded-3xl border border-white/10 bg-ink-800 p-5", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 text-base font-black text-stone-900">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-xs font-black text-brand-800">

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Vazirmatn } from "next/font/google";
+import { Lalezar, Vazirmatn } from "next/font/google";
 
 import { Providers } from "./providers";
 import { SITE } from "@/lib/site";
@@ -8,6 +8,13 @@ import "./globals.css";
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
   variable: "--font-vazirmatn",
+  display: "swap",
+});
+
+const lalezar = Lalezar({
+  subsets: ["arabic", "latin"],
+  weight: "400",
+  variable: "--font-lalezar",
   display: "swap",
 });
 
@@ -20,12 +27,14 @@ export const metadata: Metadata = {
   description: SITE.description,
   applicationName: SITE.name,
   keywords: [
-    "فروشگاه سیگار",
-    "خرید آنلاین سیگار",
-    "لوازم جانبی سیگار",
-    "پیپ",
-    "تنباکو",
-    "فروشگاه اینترنتی",
+    "رولچی",
+    "توتون",
+    "سیگار خیابونی",
+    "توتون رول",
+    "کاغذ رول",
+    "فیلتر سیگار",
+    "لوازم رول کردن",
+    "خرید آنلاین توتون",
   ],
   authors: [{ name: SITE.name }],
   creator: SITE.name,
@@ -63,15 +72,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1f2937",
+  themeColor: "#06060a",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fa" dir="rtl" className={vazirmatn.variable}>
-      <body className="min-h-screen bg-stone-50 text-stone-800 antialiased">
+    <html
+      lang="fa"
+      dir="rtl"
+      className={`${vazirmatn.variable} ${lalezar.variable}`}
+    >
+      <body className="min-h-screen bg-stone-50 text-stone-600 antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

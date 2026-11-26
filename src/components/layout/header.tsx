@@ -231,14 +231,14 @@ function SearchAutocomplete({
     switch (type) {
       case "category":
         return (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden className="text-emerald-600">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden className="text-emerald-300">
             <path d="M4 12.5l5 5 10-10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M4 12.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         );
       case "brand":
         return (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden className="text-violet-600">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden className="text-violet-300">
             <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="1.8"/>
             <path d="M6 8h12M6 12h8M6 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
@@ -257,12 +257,12 @@ function SearchAutocomplete({
   const getTypeColor = (type: SearchSuggestion["type"]) => {
     switch (type) {
       case "category":
-        return "bg-emerald-50 text-emerald-700 border-emerald-100";
+        return "bg-emerald-500/15 text-emerald-300 border-emerald-400/30";
       case "brand":
-        return "bg-violet-50 text-violet-700 border-violet-100";
+        return "bg-violet-500/15 text-violet-300 border-violet-400/30";
       case "product":
       default:
-        return "bg-brand-50 text-brand-700 border-brand-100";
+        return "bg-brand-500/15 text-brand-300 border-brand-400/30";
     }
   };
 
@@ -281,8 +281,8 @@ function SearchAutocomplete({
       className={cn(
         "group flex items-center gap-3 px-4 py-3.5 border-b border-stone-100/60 last:border-0 rounded-none w-full text-right transition-all duration-200",
         isHighlighted
-          ? "bg-gradient-to-r from-brand-50/80 via-white to-brand-50/40 border-brand-100/50 shadow-sm shadow-brand-200/30"
-          : "hover:bg-stone-50/50 hover:shadow-sm hover:shadow-stone-200/30"
+          ? "bg-gradient-to-r from-brand-500/15 via-white/5 to-brand-500/10 border-brand-400/25 shadow-sm shadow-brand-500/10"
+          : "hover:bg-white/5"
       )}
       onMouseEnter={() => setHighlightedIndex(index)}
       onMouseLeave={() => setHighlightedIndex(-1)}
@@ -305,10 +305,10 @@ function SearchAutocomplete({
             <div className={cn(
               "flex justify-center items-center rounded-2xl w-10 h-10 text-xl shadow-sm",
               suggestion.type === "category"
-                ? "bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-700"
+                ? "bg-emerald-500/15 text-emerald-300"
                 : suggestion.type === "brand"
-                  ? "bg-gradient-to-br from-violet-100 to-violet-200 text-violet-700"
-                  : "bg-gradient-to-br from-brand-100 to-brand-200 text-brand-700"
+                  ? "bg-violet-500/15 text-violet-300"
+                  : "bg-brand-500/15 text-brand-300"
             )}>
               {getTypeIcon(suggestion.type)}
             </div>
@@ -324,7 +324,7 @@ function SearchAutocomplete({
         </span>
       </div>
       <div className="flex-1 min-w-0 text-right">
-        <p className="font-semibold text-stone-900 text-sm truncate leading-snug group-hover:text-brand-700 transition-colors">
+        <p className="font-semibold text-stone-800 text-sm truncate leading-snug group-hover:text-brand-300 transition-colors">
           {suggestion.label}
         </p>
         <div className="flex items-center gap-2 mt-1.5">
@@ -366,7 +366,7 @@ function SearchAutocomplete({
       onClick={() => handleRecentClick(query)}
       className="group flex items-center gap-3 px-4 py-3 border-b border-stone-100/60 last:border-0 rounded-none w-full text-right transition-all duration-200 hover:bg-stone-50/50 hover:shadow-sm hover:shadow-stone-200/30"
     >
-      <div className="flex justify-center items-center bg-gradient-to-br from-stone-100 to-stone-200 rounded-2xl w-12 h-12 text-stone-500 shrink-0 group-hover:scale-105 transition-transform">
+      <div className="flex justify-center items-center bg-white/5 rounded-2xl w-12 h-12 text-stone-400 shrink-0 group-hover:scale-105 transition-transform">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
           <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -389,13 +389,13 @@ function SearchAutocomplete({
       onClick={() => handleTrendingClick(query)}
       className="group flex items-center gap-3 px-4 py-3 border-b border-stone-100/60 last:border-0 rounded-none w-full text-right transition-all duration-200 hover:bg-stone-50/50 hover:shadow-sm hover:shadow-stone-200/30"
     >
-      <div className="flex justify-center items-center bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl w-12 h-12 text-amber-600 shrink-0 group-hover:scale-105 transition-transform">
+      <div className="flex justify-center items-center bg-amber-500/15 rounded-2xl w-12 h-12 text-amber-300 shrink-0 group-hover:scale-105 transition-transform">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
       <div className="flex-1 min-w-0 text-right">
-        <p className="font-semibold text-stone-900 text-sm truncate leading-snug group-hover:text-brand-700 transition-colors">
+        <p className="font-semibold text-stone-800 text-sm truncate leading-snug group-hover:text-brand-300 transition-colors">
           {query}
         </p>
         <span className="flex items-center gap-1 text-stone-400 text-xs mt-1">
@@ -405,7 +405,7 @@ function SearchAutocomplete({
           {count.toLocaleString("fa-IR")} جستجو
         </span>
       </div>
-      <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-[10px] font-medium border border-amber-100 shrink-0">
+      <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 text-[10px] font-medium border border-amber-400/30 shrink-0">
         رائج
       </span>
     </button>
@@ -467,11 +467,11 @@ function SearchAutocomplete({
         </div>
       </div>
       {onClear && (
-        <button
-          type="button"
-          onClick={onClear}
-          className="font-medium text-stone-400 hover:text-stone-600 text-xs transition-colors px-2 py-1 rounded-lg hover:bg-stone-200/50"
-        >
+                    <button
+              type="button"
+              onClick={onClear}
+              className="font-medium text-stone-400 hover:text-white text-xs transition-colors px-2 py-1 rounded-lg hover:bg-white/10"
+            >
           پاک کردن
         </button>
       )}
@@ -503,11 +503,11 @@ function SearchAutocomplete({
             {renderSectionHeader({
               title: "جستجوهای رائج",
               icon: (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="text-amber-600">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="text-amber-300">
                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               ),
-              color: "text-amber-600",
+              color: "text-amber-300",
               count: trendingSearches.length,
             })}
             {trendingSearches.slice(0, 6).map((trending, index) => (
@@ -521,11 +521,11 @@ function SearchAutocomplete({
             {renderSectionHeader({
               title: "پیشنهادها",
               icon: (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="text-brand-600">
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="text-brand-300">
                   <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               ),
-              color: "text-brand-600",
+              color: "text-brand-300",
               count: suggestions.length,
             })}
             {suggestions.map((suggestion, index) => (
@@ -589,7 +589,7 @@ function SearchAutocomplete({
                     onClick={() => handleTrendingClick(trending.query)}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 hover:border-brand-300 hover:bg-brand-50 text-stone-600 hover:text-brand-700 text-xs font-medium transition-all duration-200"
                   >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="text-amber-500">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="text-splash-yellow">
                       <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     {trending.query}
@@ -615,7 +615,7 @@ function SearchAutocomplete({
   return (
     <div
       ref={dropdownRef}
-      className="top-full right-0 left-0 z-50 absolute bg-white/95 backdrop-blur-xl shadow-2xl shadow-stone-900/10 mt-2.5 border border-stone-200/60 rounded-3xl w-full overflow-hidden origin-top-right animate-in duration-300 ease-out-[cubic-bezier(0.16,1,0.3,1)] fade-in-0 zoom-in-95 slide-in-from-top-1"
+      className="top-full right-0 left-0 z-50 absolute bg-ink-800/95 backdrop-blur-xl shadow-2xl shadow-black/70 mt-2.5 border border-white/10 rounded-3xl w-full overflow-hidden origin-top-right animate-in duration-300 ease-out-[cubic-bezier(0.16,1,0.3,1)] fade-in-0 zoom-in-95 slide-in-from-top-1"
       role="listbox"
       aria-label="پیشنهادات جستجو"
       style={{ maxHeight: "60vh" }}
@@ -666,7 +666,7 @@ function CartLink({ onNavigate }: { onNavigate?: () => void }) {
     <Link
       href="/cart"
       onClick={onNavigate}
-      className="relative flex justify-center items-center bg-white border border-stone-200 hover:border-brand-200 rounded-xl w-10 h-10 text-stone-600 hover:text-brand-800 transition"
+      className="relative flex justify-center items-center bg-white/5 hover:bg-white/10 border border-white/10 hover:border-brand-400/60 rounded-xl w-10 h-10 text-stone-500 hover:text-white transition"
       aria-label="سبد خرید"
     >
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -680,7 +680,7 @@ function CartLink({ onNavigate }: { onNavigate?: () => void }) {
         <circle cx="17" cy="19.5" r="1.2" fill="currentColor" />
       </svg>
       {count > 0 ? (
-        <span className="-top-1.5 -left-1.5 absolute flex justify-center items-center bg-brand-700 px-1 rounded-full ring-2 ring-white min-w-5 h-5 font-bold text-[10px] text-white">
+        <span className="-top-1.5 -left-1.5 absolute flex justify-center items-center bg-brand-500 px-1 rounded-full ring-2 ring-ink-950 min-w-5 h-5 font-bold text-[10px] text-ink-950">
           {count.toLocaleString("fa-IR")}
         </span>
       ) : null}
@@ -745,11 +745,11 @@ export function Header() {
 
   return (
     <header className="top-0 z-40 sticky">
-      <div className="bg-stone-950 text-stone-300">
+      <div className="bg-ink-950 border-white/10 border-b text-stone-400">
         <div className="flex justify-between items-center gap-4 py-2 text-[11px] container-page">
           <p className="flex items-center gap-2">
-            <span className="bg-brand-400 rounded-full w-1.5 h-1.5" />
-            ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان
+            <span className="bg-splash-yellow rounded-full w-1.5 h-1.5" />
+            پیک رولچی · ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان
           </p>
           <a href="tel:+982191000000" className="hidden sm:block hover:text-white transition">
             پشتیبانی: {SITE.phone}
@@ -757,41 +757,14 @@ export function Header() {
         </div>
       </div>
 
-      <div className="bg-white/90 backdrop-blur-xl border-stone-200/80 border-b">
-        <div className="flex items-center gap-3 sm:gap-5 h-16 container-page">
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="flex justify-center items-center bg-stone-950 shadow-lg shadow-stone-950/20 rounded-xl w-10 h-10 text-brand-300">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M12 3c2.4 2.2 4 4.4 4 7a4 4 0 0 1-8 0c0-1.3.4-2.4 1.2-3.4C8.5 8.5 8 10.2 8 12a4 4 0 0 0 8 0"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M12 21c3.9 0 7-2.9 7-6.5 0-1.2-.3-2.3-.9-3.3"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-            <span className="leading-tight">
-              <span className="block font-black text-stone-900 text-sm tracking-tight">
-                {SITE.name}
-              </span>
-              <span className="block font-medium text-[10px] text-stone-400">
-                {SITE.tagline}
-              </span>
-            </span>
-          </Link>
-
+      <div className="bg-ink-950/90 backdrop-blur-xl border-white/10 border-b">
+        <div className="flex items-center gap-3 sm:gap-4 h-16 container-page">
           <nav className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:bg-stone-100 px-3 py-2 rounded-lg font-semibold text-stone-600 hover:text-stone-900 text-sm transition"
+                className="hover:bg-white/10 px-3 py-2 rounded-lg font-semibold text-stone-500 hover:text-white text-sm transition"
               >
                 {link.label}
               </Link>
@@ -799,7 +772,7 @@ export function Header() {
             {isAuthenticated ? (
               <Link
                 href="/orders"
-                className="hover:bg-stone-100 px-3 py-2 rounded-lg font-semibold text-stone-600 hover:text-stone-900 text-sm transition"
+                className="hover:bg-white/10 px-3 py-2 rounded-lg font-semibold text-stone-500 hover:text-white text-sm transition"
               >
                 سفارش‌های من
               </Link>
@@ -818,7 +791,7 @@ export function Header() {
               isOpen={desktopSearchOpen}
               inputRef={desktopSearchInputRef}
             />
-            <div className="flex items-center gap-2 bg-stone-50/80 focus-within:bg-white px-3 border border-stone-200 focus-within:border-brand-400 rounded-xl focus-within:ring-4 focus-within:ring-brand-500/10 w-full h-10 transition">
+            <div className="flex items-center gap-2 bg-white/5 focus-within:bg-white/10 px-3 border border-white/10 focus-within:border-brand-400 rounded-xl focus-within:ring-4 focus-within:ring-brand-500/15 w-full h-10 transition">
               <svg
                 width="16"
                 height="16"
@@ -834,8 +807,8 @@ export function Header() {
                 type="search"
                 name="q"
                 autoComplete="off"
-                placeholder="جستجوی محصول، برند یا کد کالا"
-                className="bg-transparent focus:outline-none w-full h-full text-stone-700 placeholder:text-stone-400 text-xs"
+                placeholder="جستجوی توتون، کاغذ رول، فیلتر…"
+                className="bg-transparent focus:outline-none w-full h-full text-stone-800 placeholder:text-stone-400 text-xs"
                 ref={desktopSearchInputRef}
                 value={desktopSearchValue}
                 onChange={(e) => {
@@ -865,16 +838,16 @@ export function Header() {
                   aria-haspopup="menu"
                   aria-expanded={profileOpen}
                   className={cn(
-                    "group flex items-center gap-2 bg-gradient-to-l from-white to-stone-50/80 py-1.5 ps-1.5 pe-3 border rounded-2xl transition",
+                    "group flex items-center gap-2 bg-white/5 py-1.5 ps-1.5 pe-3 border rounded-2xl transition",
                     profileOpen
-                      ? "border-brand-300 shadow-lg shadow-brand-900/5"
-                      : "border-stone-200 hover:border-brand-200 hover:shadow-sm",
+                      ? "border-brand-400/60 shadow-lg shadow-brand-500/20"
+                      : "border-white/10 hover:border-brand-400/50 hover:shadow-sm",
                   )}
                 >
                   <UserAvatar
                     src={avatarSrc}
                     name={userName}
-                    className="rounded-xl ring-2 ring-white w-8 h-8 text-xs"
+                    className="rounded-xl ring-2 ring-white/20 w-8 h-8 text-xs"
                   />
                   <span className="hidden sm:flex flex-col items-start min-w-0">
                     <span className="max-w-[7.5rem] font-bold text-stone-800 text-xs truncate">
@@ -908,14 +881,14 @@ export function Header() {
                 <div
                   role="menu"
                   className={cn(
-                    "top-[calc(100%+0.65rem)] z-50 absolute bg-white shadow-2xl shadow-stone-900/10 border border-stone-200/80 rounded-2xl w-72 overflow-hidden origin-top transition-all duration-200 end-0",
+                    "top-[calc(100%+0.65rem)] z-50 absolute bg-ink-800 shadow-2xl shadow-black/70 border border-white/10 rounded-2xl w-72 overflow-hidden origin-top transition-all duration-200 end-0",
                     profileOpen
                       ? "visible translate-y-0 scale-100 opacity-100"
                       : "pointer-events-none invisible -translate-y-1.5 scale-95 opacity-0",
                   )}
                 >
-                  <div className="relative bg-gradient-to-br from-brand-50 via-white to-stone-50 p-4 overflow-hidden">
-                    <span className="-top-8 -left-6 absolute bg-brand-200/40 blur-2xl rounded-full w-20 h-20" />
+                  <div className="relative bg-gradient-to-br from-brand-500/20 via-ink-800 to-ink-800 p-4 overflow-hidden">
+                    <span className="-top-8 -left-6 absolute bg-splash-violet/30 blur-2xl rounded-full w-20 h-20" />
                     <div className="relative flex items-center gap-3">
                       <UserAvatar
                         src={avatarSrc}
@@ -943,7 +916,7 @@ export function Header() {
                       href="/account"
                       role="menuitem"
                       onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2.5 hover:bg-stone-50 px-3 py-2.5 rounded-xl font-semibold text-stone-700 hover:text-stone-900 text-xs transition"
+                      className="flex items-center gap-2.5 hover:bg-white/5 px-3 py-2.5 rounded-xl font-semibold text-stone-500 hover:text-white text-xs transition"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden className="text-stone-400">
                         <circle cx="12" cy="8" r="3.4" stroke="currentColor" strokeWidth="1.7" />
@@ -955,7 +928,7 @@ export function Header() {
                       href="/orders"
                       role="menuitem"
                       onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-2.5 hover:bg-stone-50 px-3 py-2.5 rounded-xl font-semibold text-stone-700 hover:text-stone-900 text-xs transition"
+                      className="flex items-center gap-2.5 hover:bg-white/5 px-3 py-2.5 rounded-xl font-semibold text-stone-500 hover:text-white text-xs transition"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden className="text-stone-400">
                         <path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
@@ -970,7 +943,7 @@ export function Header() {
                       type="button"
                       role="menuitem"
                       onClick={handleLogout}
-                      className="flex items-center gap-2.5 hover:bg-rose-50 px-3 py-2.5 rounded-xl w-full font-semibold text-rose-600 text-xs transition"
+                      className="flex items-center gap-2.5 hover:bg-rose-500/10 px-3 py-2.5 rounded-xl w-full font-semibold text-rose-300 text-xs transition"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
                         <path d="M14 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
@@ -984,9 +957,9 @@ export function Header() {
             ) : (
               <Link
                 href="/login"
-                className="sm:hidden flex md:flex items-center bg-stone-900 hover:bg-stone-800 px-4 rounded-xl h-10 font-bold text-white text-xs transition"
+                className="sm:hidden flex md:flex items-center bg-gradient-to-l from-brand-500 via-brand-400 to-splash-orange hover:brightness-110 px-4 rounded-xl h-10 font-bold text-ink-950 shadow-brand-500/25 shadow-lg text-xs transition"
               >
-                ورود / ثبت‌نام
+                ورود به رولچی
               </Link>
             )}
 
@@ -996,7 +969,7 @@ export function Header() {
               type="button"
               onClick={() => setMobileSearchModalOpen(true)}
               aria-label="جستجو"
-              className="lg:hidden flex justify-center items-center bg-white border border-stone-200 rounded-xl w-10 h-10 text-stone-600"
+              className="lg:hidden flex justify-center items-center bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl w-10 h-10 text-stone-500 hover:text-white"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
@@ -1009,7 +982,7 @@ export function Header() {
               onClick={() => setMobileOpen((open) => !open)}
               aria-label="منو"
               aria-expanded={mobileOpen}
-              className="lg:hidden flex justify-center items-center bg-white border border-stone-200 rounded-xl w-10 h-10 text-stone-600"
+              className="lg:hidden flex justify-center items-center bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl w-10 h-10 text-stone-500 hover:text-white"
             >
               {mobileOpen ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -1028,9 +1001,9 @@ export function Header() {
           inert={!mobileOpen}
           aria-hidden={!mobileOpen}
           className={cn(
-            "lg:hidden grid bg-white overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "lg:hidden grid bg-ink-900 overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
             mobileOpen
-              ? "grid-rows-[1fr] border-t border-stone-100 opacity-100"
+              ? "grid-rows-[1fr] border-t border-white/10 opacity-100"
               : "pointer-events-none grid-rows-[0fr] border-t border-transparent opacity-0",
           )}
         >
@@ -1041,7 +1014,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block hover:bg-stone-50 px-3 py-2.5 rounded-xl font-semibold text-stone-700 text-sm transition"
+                  className="block hover:bg-white/5 px-3 py-2.5 rounded-xl font-semibold text-stone-500 hover:text-white text-sm transition"
                 >
                   {link.label}
                 </Link>
@@ -1051,7 +1024,7 @@ export function Header() {
                 <Link
                   href="/orders"
                   onClick={() => setMobileOpen(false)}
-                  className="block hover:bg-stone-50 px-3 py-2.5 rounded-xl font-semibold text-stone-700 text-sm transition"
+                  className="block hover:bg-white/5 px-3 py-2.5 rounded-xl font-semibold text-stone-500 hover:text-white text-sm transition"
                 >
                   سفارش‌های من
                 </Link>
@@ -1069,7 +1042,7 @@ export function Header() {
         className="max-w-[440px]"
       >
         <div ref={mobileSearchInputRef} className="relative w-full">
-          <div className="flex items-center gap-2 bg-stone-50 px-3 border border-stone-200 rounded-xl h-11">
+          <div className="flex items-center gap-2 bg-white/5 px-3 border border-white/10 rounded-xl h-11">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden className="text-stone-400">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
               <path d="m16.5 16.5 4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />

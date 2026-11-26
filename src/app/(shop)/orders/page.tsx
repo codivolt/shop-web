@@ -28,7 +28,7 @@ function OrdersView() {
   return (
     <PageLayout
       title="سفارش‌های من"
-      description="وضعیت سفارش‌ها را پیگیری کنید و جزئیات هر سفارش را ببینید."
+      description="وضعیت سفارش‌های رولچی را پیگیری کنید و جزئیات هر سفارش را ببینید."
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "سفارش‌ها" }]}
       actionLabel="خرید جدید"
       actionHref="/products"

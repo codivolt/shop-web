@@ -63,23 +63,23 @@ export const ORDER_STATUS_META: Record<
 > = {
   pending: {
     label: "در انتظار تأیید",
-    className: "bg-amber-50 text-amber-700 ring-amber-200",
+    className: "bg-amber-500/15 text-amber-300 ring-amber-400/30",
   },
   processing: {
     label: "در حال پردازش",
-    className: "bg-sky-50 text-sky-700 ring-sky-200",
+    className: "bg-sky-500/15 text-sky-300 ring-sky-400/30",
   },
   shipped: {
     label: "ارسال شده",
-    className: "bg-indigo-50 text-indigo-700 ring-indigo-200",
+    className: "bg-indigo-500/15 text-indigo-300 ring-indigo-400/30",
   },
   delivered: {
     label: "تحویل شده",
-    className: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+    className: "bg-emerald-500/15 text-emerald-300 ring-emerald-400/30",
   },
   cancelled: {
     label: "لغو شده",
-    className: "bg-rose-50 text-rose-700 ring-rose-200",
+    className: "bg-rose-500/15 text-rose-300 ring-rose-400/30",
   },
 };
 
@@ -93,11 +93,11 @@ export const PAYMENT_STATUS_META: Record<
   },
   paid: {
     label: "پرداخت شده",
-    className: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+    className: "bg-emerald-500/15 text-emerald-300 ring-emerald-400/30",
   },
   refunded: {
     label: "بازگشت وجه",
-    className: "bg-sky-50 text-sky-700 ring-sky-200",
+    className: "bg-sky-500/15 text-sky-300 ring-sky-400/30",
   },
 };
 
