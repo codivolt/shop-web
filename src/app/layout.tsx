@@ -58,7 +58,6 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/pwa-192x192.png",
   },
-  manifest: "/manifest.json",
   formatDetection: { telephone: false },
 };
 
