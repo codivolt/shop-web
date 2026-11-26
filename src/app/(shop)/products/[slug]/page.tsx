@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ProductCardComponent, ProductGrid, Breadcrumbs, PageLayout, SectionCard, Badge, StatCard } from "@/components/ui";
+import { ProductCardComponent, ProductGrid, PageLayout, SectionCard, Badge, StatCard } from "@/components/ui";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 import {
@@ -161,12 +161,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-
-      <div className="border-b border-stone-200/80 bg-white">
-        <div className="container-page py-4">
-          <Breadcrumbs items={breadcrumbItems} />
-        </div>
-      </div>
 
       <PageLayout
         title={product.name}
