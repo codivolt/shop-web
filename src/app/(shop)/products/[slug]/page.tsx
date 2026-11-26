@@ -85,14 +85,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
     getRelatedProducts(product.categoryId, product.id, 4),
   ]);
 
-  const galleryImages =
-    images.length > 0
-      ? [...images]
-          .sort((a, b) => Number(b.isPrimary) - Number(a.isPrimary) || a.sortOrder - b.sortOrder)
-          .map((image) => ({ id: image.id, imageUrl: image.imageUrl }))
-      : product.imageUrl
-        ? [{ id: product.id, imageUrl: product.imageUrl }]
-        : [];
+  const sortedGallery = [...images].sort(
+    (a, b) => Number(b.isPrimary) - Number(a.isPrimary) || a.sortOrder - b.sortOrder,
+  );
+
+  const galleryImages = [
+    ...(product.imageUrl &&
+    !sortedGallery.some((image) => image.imageUrl === product.imageUrl)
+      ? [{ id: product.id, imageUrl: product.imageUrl }]
+      : []),
+    ...sortedGallery.map((image) => ({ id: image.id, imageUrl: image.imageUrl })),
+  ];
 
   const inStock = product.stock > 0;
   const productUrl = `${SITE.url}/products/${product.slug}`;
