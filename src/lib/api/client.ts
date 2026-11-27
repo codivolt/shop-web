@@ -1,11 +1,12 @@
 import axios from "axios";
 
 import { API_URL } from "../site";
-import { clearSession, getToken } from "../session";
+import { clearSession, getToken, saveSession } from "../session";
 
 export const http = axios.create({
   baseURL: API_URL,
   timeout: 15_000,
+  withCredentials: true,
   headers: { Accept: "application/json" },
 });
 
@@ -19,15 +20,35 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
   (response) => response,
-  (error: unknown) => {
-    if (
-      axios.isAxiosError(error) &&
-      error.response?.status === 401 &&
-      getToken()
-    ) {
+  async (error: unknown) => {
+    if (!axios.isAxiosError(error)) return Promise.reject(error);
+
+    const status = error.response?.status;
+    const config = error.config as (typeof error.config & { _retry?: boolean }) | undefined;
+
+    if (status === 401 && config && !config._retry) {
+      config._retry = true;
+      try {
+        const refresh = await http.post("/auth/refresh", undefined, {
+          withCredentials: true,
+        });
+        saveSession(refresh.data);
+        const token = getToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return http(config);
+      } catch {
+        clearSession();
+        window.dispatchEvent(new Event("auth:expired"));
+      }
+    }
+
+    if (status === 401 && getToken()) {
       clearSession();
       window.dispatchEvent(new Event("auth:expired"));
     }
+
     return Promise.reject(error);
   },
 );
