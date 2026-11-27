@@ -41,11 +41,12 @@ export function FavoriteButton({
       onClick={handleClick}
       disabled={mutation.isPending}
       aria-pressed={isFavorite}
+      style={isFavorite ? { color: "#ef4444" } : undefined}
       aria-label={isFavorite ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
       className={cn(
         "inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 text-stone-400 transition hover:border-rose-400/50 hover:text-rose-300 disabled:opacity-50",
         withLabel ? "h-11 px-4 text-sm font-semibold" : "h-9 w-9",
-        isFavorite && "border-rose-400/50 bg-rose-500/10 text-rose-300",
+        isFavorite && "border-red-500/50 bg-red-500/15 text-red-500",
         className,
       )}
     >
