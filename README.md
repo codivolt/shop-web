@@ -1,38 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shop Web (Next.js)
 
-## Getting Started
+Customer-facing storefront for the **Rolchi** e-commerce platform. Built with **Next.js 16 (App Router) + React + Redux Toolkit + TanStack Query + Tailwind CSS**, PWA-enabled and SEO-optimized.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 1. Tech Stack
+
+| Concern | Choice |
+| --- | --- |
+| Framework | Next.js 16 (App Router, Turbopack) |
+| UI | React 18, Tailwind CSS, `lucide-react` icons |
+| State | Redux Toolkit (`react-redux`) + TanStack Query (server state) |
+| Forms | `react-hook-form` + `zod` (`@hookform/resolvers`) |
+| HTTP | `axios` (wrapper in `src/lib/api`) |
+| Toasts | `react-hot-toast` |
+| PWA | `@ducanh2912/next-pwa` (manifest, service worker) |
+| Drawers | `vaul` (mobile bottom sheets) |
+| SEO | Metadata API, `opengraph-image`, `twitter-image`, `sitemap`, `robots`, JSON-LD |
+
+---
+
+## 2. Structure
+
+```
+src/
+├── app/
+│   ├── (shop)/            # storefront layout group
+│   │   ├── page.tsx       # home
+│   │   ├── products/      # list + [slug] detail
+│   │   ├── categories/
+│   │   ├── cart/
+│   │   ├── checkout/
+│   │   ├── orders/        # list + detail
+│   │   └── account/
+│   ├── (auth)/login/
+│   ├── layout.tsx
+│   ├── manifest.ts
+│   ├── opengraph-image.tsx
+│   ├── twitter-image.tsx
+│   ├── sitemap.ts
+│   └── robots.ts
+├── components/
+│   ├── ui/                # design-system primitives (card, badge, button, modal, field, section, skeleton, empty-state, pagination, quantity-stepper, order-summary, page-layout, ImageViewer, step-indicator, modal-sheet, modal-header)
+│   ├── layout/            # header (search, cart, account), footer
+│   ├── home/              # splash-slider, FeaturedSlider
+│   ├── product/           # product-card, product-image, product-gallery, product-purchase-panel
+│   ├── cart/ · account/ · auth/
+├── hooks/                 # use-auth, use-cart, use-orders, use-profile, ...
+├── lib/                   # format.ts, site.ts, cn.ts, session.ts, guest-cart.ts, validation.ts, types.ts, api/
+└── store/                 # Redux store + slices
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3. Environment Variables (`.env.local`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Key | Description |
+| --- | --- |
+| `NEXT_PUBLIC_API_URL` | Backend base URL (default `http://localhost:3000`) |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (used for SEO/canonical) |
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 4. Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm install
+pnpm run dev      # next dev (port 3001)
+pnpm run build    # next build
+pnpm run start    # next start
+pnpm run lint     # eslint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 5. Key Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Home**: splash slider, featured products, categories, brands.
+- **Products**: listing with filters/search/pagination; detail page with gallery (main image included), purchase panel, related products.
+- **Cart**: guest cart (localStorage) + server cart merge; quantity stepper; order summary.
+- **Checkout**: address form, delivery method, payment method, receipt upload for card-to-card/sheba/crypto, order summary.
+- **Orders**: list + detail view with receipt workflow (upload, history, rejection reason fallback).
+- **Account**: profile, addresses, order history.
+- **Auth**: login (phone + password; login = registration on backend).
+- **SEO/perf**: rich metadata, multiple OG images, JSON-LD, `revalidate`, image optimization (avif/webp, `minimumCacheTTL`), `poweredByHeader:false`, `compress:true`.
+- **PWA**: manifest + service worker (precache).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# shop-web
-# shop-web
+---
+
+## 6. Shared Utilities
+
+- `lib/format.ts`: `formatPrice`, `formatNumber`, `formatDate`, `formatDateTime`, `normalizeImage`, `absoluteImage`, `ORDER_STATUS_META`, `PAYMENT_STATUS_META`, `cartTotal`.
+- `lib/site.ts`: site metadata (name, description, URLs).
+- `lib/api/`: axios client + `apiErrorMessage`.
+- `components/ui`: reusable primitives (see structure) — prefer these over inline markup to avoid duplication.
+
+---
+
+## 7. Conventions
+
+- Use `components/ui` primitives and `lib/format` helpers everywhere; do not re-implement formatting or buttons.
+- Server components fetch via `lib/api/catalog`; client components use TanStack Query hooks.
+- Keep pages thin; extract repeated blocks into `components`.
