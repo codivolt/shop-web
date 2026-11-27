@@ -119,7 +119,6 @@ function CartView() {
             subtotal={subtotal}
             deliveryPrice={0}
             totalAmount={subtotal}
-            deliveryLabel="هزینه ارسال (در تسویه محاسبه می‌شود)"
             actionLabel="ادامه و ثبت سفارش"
             actionHref={isAuthenticated ? "/checkout" : "/login?next=/checkout"}
             variant="checkout"

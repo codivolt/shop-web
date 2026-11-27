@@ -33,7 +33,7 @@ export function OrderSummary({
   deliveryPrice,
   totalAmount,
   discountAmount = 0,
-  deliveryLabel = "هزینه ارسال",
+  deliveryLabel,
   actionLabel,
   actionHref,
   onAction,
@@ -66,10 +66,12 @@ export function OrderSummary({
               <dd className="font-semibold">-{formatPrice(discountAmount)}</dd>
             </div>
           )}
-          <div className="flex items-center justify-between">
-            <dt className="text-stone-500">{deliveryLabel}</dt>
-            <dd className="font-semibold text-emerald-300">{deliveryPrice === 0 ? "رایگان" : formatPrice(deliveryPrice)}</dd>
-          </div>
+          {deliveryLabel && (
+            <div className="flex items-center justify-between">
+              <dt className="text-stone-500">{deliveryLabel}</dt>
+              <dd className="font-semibold text-emerald-300">{deliveryPrice === 0 ? "رایگان" : formatPrice(deliveryPrice)}</dd>
+            </div>
+          )}
           <div className="flex items-center justify-between border-t border-dashed border-stone-200 pt-4">
             <dt className="font-bold text-stone-700">مبلغ قابل پرداخت</dt>
             <dd className="text-lg font-black text-brand-800">{formatPrice(totalAmount)}</dd>
