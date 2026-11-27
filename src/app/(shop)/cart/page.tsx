@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { ProductImage } from "@/components/product/product-image";
-import { Button, buttonStyles, EmptyState, PageLayout, CartItemCard, OrderSummary } from "@/components/ui";
+import { Button, EmptyState, PageLayout, CartItemCard, OrderSummary } from "@/components/ui";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthState } from "@/hooks/use-auth";
 import {
@@ -14,8 +12,7 @@ import {
   useUpdateCartItem,
 } from "@/hooks/use-cart";
 import { apiErrorMessage } from "@/lib/api/client";
-import { formatPrice } from "@/lib/format";
-import type { CartItem } from "@/lib/types";
+import { formatNumber } from "@/lib/format";
 
 export default function CartPage() {
   return <CartView />;
@@ -32,7 +29,7 @@ function CartView() {
   return (
     <PageLayout
       title="سبد خرید رولچی"
-      description={items.length > 0 ? `${items.length.toLocaleString("fa-IR")} نوع کالا در سبد شما` : "سبد رولچی‌ات هنوز خالیه؛ از فروشگاه شروع کن"}
+      description={items.length > 0 ? `${formatNumber(items.length)} نوع کالا در سبد شما` : "سبد رولچی‌ات هنوز خالیه؛ از فروشگاه شروع کن"}
       breadcrumbs={[{ label: "خانه", href: "/" }, { label: "سبد خرید" }]}
       actionLabel="ادامه خرید"
       actionHref="/products"

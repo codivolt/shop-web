@@ -13,9 +13,8 @@ import { Modal } from "@/components/ui/modal";
 import { useAuthActions, useAuthState, displayName } from "@/hooks/use-auth";
 import { useCartCount } from "@/hooks/use-cart";
 import { cn } from "@/lib/cn";
-import { API_URL } from "@/lib/site";
-import { absoluteImage } from "@/lib/format";
-import { SITE } from "@/lib/site";
+import { absoluteImage, formatNumber } from "@/lib/format";
+import { API_URL, SITE } from "@/lib/site";
 
 const NAV_LINKS = [
   { href: "/", label: "خانه" },
@@ -334,7 +333,7 @@ function SearchAutocomplete({
                 <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2M4 10v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M8 14h8M12 10v8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
               </svg>
-              {suggestion.count.toLocaleString("fa-IR")}
+              {formatNumber(suggestion.count)}
             </span>
           )}
           <span className={cn(
@@ -402,7 +401,7 @@ function SearchAutocomplete({
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          {count.toLocaleString("fa-IR")} جستجو
+          {formatNumber(count)} جستجو
         </span>
       </div>
       <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300 text-[10px] font-medium border border-amber-400/30 shrink-0">
@@ -462,7 +461,7 @@ function SearchAutocomplete({
         <div>
           <span className="font-semibold text-stone-700 text-xs tracking-tight uppercase">{title}</span>
           {count !== undefined && (
-            <span className="text-stone-400 text-[10px] ml-1">({count.toLocaleString("fa-IR")})</span>
+            <span className="text-stone-400 text-[10px] ml-1">({formatNumber(count)})</span>
           )}
         </div>
       </div>
@@ -681,7 +680,7 @@ function CartLink({ onNavigate }: { onNavigate?: () => void }) {
       </svg>
       {count > 0 ? (
         <span className="-top-1.5 -left-1.5 absolute flex justify-center items-center bg-brand-500 px-1 rounded-full ring-2 ring-ink-950 min-w-5 h-5 font-bold text-[10px] text-ink-950">
-          {count.toLocaleString("fa-IR")}
+          {formatNumber(count)}
         </span>
       ) : null}
     </Link>

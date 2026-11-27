@@ -6,7 +6,6 @@ export const revalidate = 60;
 
 import {
   ProductGrid,
-  ProductCardComponent,
   EmptyState,
   Pagination,
   PageLayout,

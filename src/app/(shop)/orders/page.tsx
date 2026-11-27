@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 
 import { RequireAuth } from "@/components/auth/require-auth";
-import { StatusBadge } from "@/components/ui/badge";
 import { EmptyState, PageLayout, OrderCard, Skeleton } from "@/components/ui";
 import { useOrders } from "@/hooks/use-orders";
 import { apiErrorMessage } from "@/lib/api/client";
@@ -11,7 +9,6 @@ import {
   ORDER_STATUS_META,
   PAYMENT_STATUS_META,
   formatDateTime,
-  formatPrice,
 } from "@/lib/format";
 
 export default function OrdersPage() {

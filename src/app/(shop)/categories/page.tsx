@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { PageLayout, SectionCard, EmptyState, ProductCardComponent } from "@/components/ui";
+import { PageLayout, EmptyState } from "@/components/ui";
 import { getCategories } from "@/lib/api/catalog";
 import type { Category } from "@/lib/types";
 

@@ -88,8 +88,6 @@ export function useApplyReferral() {
 }
 
 export function useValidateDiscount() {
-  const { token } = useAuthState();
-
   return useMutation({
     mutationFn: async (input: { code: string; orderAmount: number }) => {
       const { data } = await http.post<{

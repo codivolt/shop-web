@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { cn } from "@/lib/cn";
+import { formatNumber } from "@/lib/format";
 
 function pageWindow(current: number, total: number): (number | "dots")[] {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
@@ -72,7 +73,7 @@ export function Pagination({
                 : "border border-stone-200 bg-white text-stone-600 hover:bg-stone-50",
             )}
           >
-            {item.toLocaleString("fa-IR")}
+            {formatNumber(item)}
           </Link>
         ),
       )}

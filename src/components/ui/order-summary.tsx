@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { ProductImage } from "@/components/product/product-image";
-import { formatPrice } from "@/lib/format";
+import { formatNumber, formatPrice } from "@/lib/format";
 import type { CartItem } from "@/lib/types";
 
 export interface OrderSummaryProps {
@@ -141,7 +141,7 @@ export function OrderItemList({ items, className }: OrderItemListProps) {
             <div className="min-w-0 flex-1">
               <p className="line-clamp-1 text-xs font-bold text-stone-800">{item.product.name}</p>
               <p className="mt-1 text-[11px] text-stone-400">
-                {item.quantity.toLocaleString("fa-IR")} × {formatPrice(item.product.price)}
+                {formatNumber(item.quantity)} × {formatPrice(item.product.price)}
               </p>
             </div>
             <p className="text-xs font-black text-stone-800">{formatPrice(item.totalPrice)}</p>

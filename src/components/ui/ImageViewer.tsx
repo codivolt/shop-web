@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { http } from "@/lib/api/client";
 import { Modal } from "@/components/ui/modal";
-import { ModalHeader } from "@/components/ui/modal-header";
 import { Button } from "@/components/ui/button";
 
 type ImageViewerProps = {

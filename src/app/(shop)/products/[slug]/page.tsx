@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ProductCardComponent, ProductGrid, PageLayout, SectionCard, Badge, StatCard } from "@/components/ui";
+import { ProductGrid, PageLayout, SectionCard, Badge } from "@/components/ui";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 import {

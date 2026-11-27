@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 
 import { AddressForm } from "@/components/account/address-form";
 import { RequireAuth } from "@/components/auth/require-auth";
-import { ProductImage } from "@/components/product/product-image";
 import {
   Button,
   buttonStyles,
@@ -28,9 +27,7 @@ import { useValidateDiscount } from "@/hooks/use-profile";
 import { useDeliveryMethods } from "@/hooks/use-delivery";
 import { usePaymentAccounts } from "@/hooks/use-payment-accounts";
 import { apiErrorMessage } from "@/lib/api/client";
-import { cn } from "@/lib/cn";
-import { formatPrice } from "@/lib/format";
-import type { Address, DeliveryMethod, PaymentAccount } from "@/lib/types";
+import type { Address } from "@/lib/types";
 
 const RECEIPT_REQUIRED_TYPES = new Set([
   "card_to_card",

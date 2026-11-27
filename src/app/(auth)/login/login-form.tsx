@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { formatNumber } from "@/lib/format";
 import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
@@ -340,7 +341,7 @@ export function LoginForm() {
                     className="font-semibold text-brand-700 hover:underline disabled:text-stone-400 disabled:no-underline"
                   >
                     {seconds > 0
-                      ? `ارسال مجدد تا ${seconds.toLocaleString("fa-IR")} ثانیه`
+                      ? `ارسال مجدد تا ${formatNumber(seconds)} ثانیه`
                       : "ارسال مجدد کد"}
                   </button>
                 </div>

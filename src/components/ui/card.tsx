@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
 import { ProductImage } from "@/components/product/product-image";
-import { Badge, BadgeTone } from "@/components/ui/badge";
-import { formatPrice } from "@/lib/format";
+import { Badge } from "@/components/ui/badge";
+import { formatNumber, formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
 export type CardVariant =
@@ -116,7 +116,7 @@ export function ProductCardComponent({ product, variant = "default", className }
           {outOfStock ? (
             <Badge tone="danger">ناموجود</Badge>
           ) : lowStock ? (
-            <Badge tone="warning">{product.stock.toLocaleString("fa-IR")} عدد باقی‌مانده</Badge>
+            <Badge tone="warning">{formatNumber(product.stock)} عدد باقی‌مانده</Badge>
           ) : null}
         </div>
       </Link>

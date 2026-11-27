@@ -32,6 +32,7 @@ import {
   PAYMENT_STATUS_META,
   absoluteImage,
   formatDateTime,
+  formatNumber,
   formatPrice,
 } from "@/lib/format";
 import type { Order, OrderStatus } from "@/lib/types";
@@ -493,7 +494,7 @@ function ActiveOrderCard({ order }: { order: Order }) {
         <div className="min-w-0">
           <p className="line-clamp-1 text-xs text-stone-600">{names}</p>
           <p className="mt-1 text-[10px] text-stone-400">
-            {itemCount.toLocaleString("fa-IR")} قلم کالا —{" "}
+            {formatNumber(itemCount)} قلم کالا —{" "}
             {formatPrice(order.totalAmount)}
           </p>
         </div>

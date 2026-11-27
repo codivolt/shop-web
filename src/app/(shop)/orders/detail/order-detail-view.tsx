@@ -14,6 +14,7 @@ import {
   ORDER_STATUS_META,
   PAYMENT_STATUS_META,
   formatDateTime,
+  formatNumber,
   formatPrice,
 } from "@/lib/format";
 import type { OrderStatus } from "@/lib/types";
@@ -156,7 +157,7 @@ function OrderDetailContent() {
                       {formatPrice(item.unitPrice)}
                     </td>
                     <td className="py-3.5 text-stone-600">
-                      {item.quantity.toLocaleString("fa-IR")}
+                      {formatNumber(item.quantity)}
                     </td>
                     <td className="py-3.5 font-bold text-stone-900">
                       {formatPrice(item.totalPrice)}

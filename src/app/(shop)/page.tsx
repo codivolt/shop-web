@@ -8,7 +8,6 @@ import { ProductImage } from "@/components/product/product-image";
 import { buttonStyles } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SectionHeading } from "@/components/ui/section";
-import { FeaturedSlider } from "@/components/home/FeaturedSlider";
 import { getBrands, getCategories, getProducts } from "@/lib/api/catalog";
 import { formatNumber, formatPrice } from "@/lib/format";
 import { SITE } from "@/lib/site";

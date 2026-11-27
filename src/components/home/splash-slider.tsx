@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { buttonStyles } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { formatNumber } from "@/lib/format";
 
 const AUTOPLAY_MS = 6000;
 
@@ -84,7 +85,6 @@ const SLIDES: Slide[] = [
   },
 ];
 
-const toFa = (value: number) => value.toLocaleString("fa-IR");
 
 export function SplashSlider() {
   const [index, setIndex] = useState(0);
@@ -197,7 +197,7 @@ export function SplashSlider() {
                     className="pointer-events-none absolute inset-0 flex items-center justify-center"
                   >
                     <span className="font-display text-[11rem] leading-none text-white/[0.05]">
-                      {toFa(itemIndex + 1)}
+                      {formatNumber(itemIndex + 1)}
                     </span>
                   </span>
 
@@ -260,8 +260,8 @@ export function SplashSlider() {
 
           <div className="flex items-center gap-3">
             <span className="font-display text-sm text-white">
-              {toFa(index + 1)}
-              <span className="text-stone-400"> / {toFa(SLIDES.length)}</span>
+              {formatNumber(index + 1)}
+              <span className="text-stone-400"> / {formatNumber(SLIDES.length)}</span>
             </span>
             <div className="relative hidden h-1 w-32 overflow-hidden rounded-full bg-white/10 sm:block lg:w-44">
               <span
@@ -278,7 +278,7 @@ export function SplashSlider() {
                 key={item.key}
                 type="button"
                 onClick={() => setIndex(itemIndex)}
-                aria-label={`اسلاید ${toFa(itemIndex + 1)}`}
+                aria-label={`اسلاید ${formatNumber(itemIndex + 1)}`}
                 aria-current={itemIndex === index}
                 className={cn(
                   "h-2 rounded-full transition-all duration-300",
