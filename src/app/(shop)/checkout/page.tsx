@@ -5,19 +5,16 @@ import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
-import { AddressForm } from "@/components/account/address-form";
+import { AddressStep } from "@/components/checkout/address-step";
+import { OrderSummaryCard } from "@/components/checkout/order-summary-card";
+import { DeliveryStep } from "@/components/checkout/delivery-step";
+import { DiscountStep } from "@/components/checkout/discount-step";
+import { PaymentStep } from "@/components/checkout/payment-step";
 import { RequireAuth } from "@/components/auth/require-auth";
 import {
-  Button,
-  buttonStyles,
   EmptyState,
   PageLayout,
-  OrderSummary,
   OrderItemList,
-  CheckoutStep,
-  AddressCard,
-  DeliveryMethodCard,
-  PaymentMethodCard,
   Skeleton,
 } from "@/components/ui";
 import { useAddresses } from "@/hooks/use-addresses";
@@ -27,13 +24,8 @@ import { useValidateDiscount } from "@/hooks/use-profile";
 import { useDeliveryMethods } from "@/hooks/use-delivery";
 import { usePaymentAccounts } from "@/hooks/use-payment-accounts";
 import { apiErrorMessage } from "@/lib/api/client";
+import { requiresReceipt } from "@/lib/checkout";
 import type { Address } from "@/lib/types";
-
-const RECEIPT_REQUIRED_TYPES = new Set([
-  "card_to_card",
-  "sheba",
-  "crypto",
-]);
 
 export default function CheckoutPage() {
   return (
@@ -89,9 +81,7 @@ function CheckoutView() {
   const selectedPayment = accounts.find((a) => a.id === selectedPaymentId);
   const deliveryPrice = Number(selectedDelivery?.price ?? 0);
   const totalAmount = Number(subtotal) + Number(deliveryPrice) - Number(discountAmount);
-  const needsReceipt =
-    Boolean(selectedPayment) &&
-    RECEIPT_REQUIRED_TYPES.has((selectedPayment?.type as any) ?? "");
+  const needsReceipt = requiresReceipt(selectedPayment?.type);
   const formVisible = showForm || (!addresses.isLoading && addressList.length === 0);
 
   const handleApplyDiscount = async () => {
@@ -111,7 +101,7 @@ function CheckoutView() {
       } else {
         toast.error(result.message || "کد تخفیف معتبر نیست");
       }
-    } catch (error) {
+    } catch {
       toast.error("خطا در اعمال کد تخفیف");
     }
   };
@@ -164,8 +154,7 @@ function CheckoutView() {
   };
 
   const handleReceiptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    setReceiptFile(file);
+    setReceiptFile(e.target.files?.[0] ?? null);
   };
 
   const handleUploadReceipt = async () => {
@@ -223,230 +212,67 @@ function CheckoutView() {
     >
       <div className="grid items-start gap-3 lg:grid-cols-[1fr_380px]">
         <div className="space-y-3">
-          <CheckoutStep number={1} title="روش ارسال">
-            {deliveryMethods.length === 0 ? (
-              <div className="mt-4 rounded-2xl border border-dashed border-stone-300 bg-stone-50/60 p-5 text-center">
-                <p className="text-sm text-stone-500">
-                  روش ارسالی تعریف نشده است. با پشتیبانی تماس بگیرید.
-                </p>
-              </div>
-            ) : (
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {deliveryMethods.map((method) => (
-                  <DeliveryMethodCard
-                    key={method.id}
-                    id={method.id}
-                    name={method.name}
-                    description={method.description}
-                    price={method.price}
-                    selected={selectedDeliveryId === method.id}
-                    onSelect={() => {
-                      setPickedDeliveryId(method.id);
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </CheckoutStep>
+          <DeliveryStep
+            methods={deliveryMethods}
+            selectedId={selectedDeliveryId}
+            onSelect={setPickedDeliveryId}
+          />
 
-          <CheckoutStep number={2} title="آدرس تحویل">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="flex items-center gap-2 text-base font-black text-stone-900" />
-              {addressList.length > 0 ? (
-                <button
-                  type="button"
-                  onClick={() => setShowForm((open) => !open)}
-                  className="text-xs font-semibold text-brand-700 hover:underline"
-                >
-                  {formVisible ? "بستن فرم" : "افزودن آدرس جدید +"}
-                </button>
-              ) : null}
-            </div>
+          <AddressStep
+            addresses={addressList}
+            selectedId={selectedAddressId}
+            isLoading={addresses.isLoading}
+            formVisible={formVisible}
+            onSelect={setPickedAddressId}
+            onToggleForm={() => setShowForm((open) => !open)}
+            onCreated={handleAddressCreated}
+          />
 
-            {addresses.isLoading ? (
-              <div className="mt-4 space-y-3">
-                <Skeleton className="h-20 w-full rounded-2xl" />
-                <Skeleton className="h-20 w-full rounded-2xl" />
-              </div>
-            ) : addressList.length > 0 ? (
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                {addressList.map((address) => (
-                  <AddressCard
-                    key={address.id}
-                    id={address.id}
-                    title={address.title}
-                    province={address.province}
-                    city={address.city}
-                    addressLine={address.addressLine}
-                    recipientName={address.recipientName}
-                    phone={address.phone}
-                    isDefault={address.isDefault}
-                    selected={selectedAddressId === address.id}
-                    onSelect={() => {
-                      setPickedAddressId(address.id);
-                    }}
-                  />
-                ))}
-              </div>
-            ) : null}
+          <PaymentStep
+            accounts={accounts}
+            selectedId={selectedPaymentId}
+            onSelect={setPickedPaymentId}
+          />
 
-            {formVisible ? (
-              <div className="mt-4 rounded-2xl border border-dashed border-stone-300 bg-stone-50/60 p-5">
-                <p className="mb-4 text-xs font-bold text-stone-600">
-                  ثبت آدرس جدید
-                </p>
-                <AddressForm
-                  onCreated={handleAddressCreated}
-                  onCancel={
-                    addressList.length > 0 ? () => setShowForm(false) : undefined
-                  }
-                />
-              </div>
-            ) : null}
-          </CheckoutStep>
-
-          <CheckoutStep number={3} title="روش پرداخت">
-            {accounts.length === 0 ? (
-              <div className="mt-4 rounded-2xl border border-dashed border-stone-300 bg-stone-50/60 p-5 text-center">
-                <p className="text-sm text-stone-500">
-                  روش پرداخت تعریف نشده است. با پشتیبانی تماس بگیرید.
-                </p>
-              </div>
-            ) : (
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {accounts.map((account) => {
-                  const requiresReceipt = RECEIPT_REQUIRED_TYPES.has(
-                    account.type as any,
-                  );
-                  return (
-                    <PaymentMethodCard
-                      key={account.id}
-                      id={account.id}
-                      name={account.name}
-                      type={account.type}
-                      bankName={account.bankName}
-                      cardNumber={account.cardNumber}
-                      sheba={account.sheba}
-                      cryptoAddress={account.cryptoAddress}
-                      selected={selectedPaymentId === account.id}
-                      onSelect={() => {
-                        setPickedPaymentId(account.id);
-                      }}
-                      requiresReceipt={requiresReceipt}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </CheckoutStep>
-
-          <CheckoutStep number={4} title="کد تخفیف">
-            <div className="mt-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={discountCode}
-                  onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
-                  placeholder="کد تخفیف را وارد کنید"
-                  className="flex-1 rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none"
-                  disabled={validateDiscount.isPending || appliedDiscountCode !== null}
-                />
-                {appliedDiscountCode ? (
-                  <button
-                    type="button"
-                    onClick={handleRemoveDiscount}
-                    className="px-4 py-3 rounded-xl bg-stone-100 text-stone-600 hover:bg-stone-200 transition-colors font-medium"
-                  >
-                    حذف
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleApplyDiscount}
-                    disabled={validateDiscount.isPending || !discountCode.trim()}
-                    className="px-4 py-3 rounded-xl bg-brand-600 text-white hover:bg-brand-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {validateDiscount.isPending ? "در حال بررسی..." : "اعمال"}
-                  </button>
-                )}
-              </div>
-              {appliedDiscountCode && (
-                <p className="mt-2 text-sm text-emerald-300 font-medium">
-                  ✓ کد <span className="font-mono">{appliedDiscountCode}</span> اعمال شد — تخفیف: {discountAmount.toLocaleString()} تومان
-                </p>
-              )}
-            </div>
-          </CheckoutStep>
+          <DiscountStep
+            code={discountCode}
+            appliedCode={appliedDiscountCode}
+            amount={discountAmount}
+            isPending={validateDiscount.isPending}
+            onCodeChange={setDiscountCode}
+            onApply={handleApplyDiscount}
+            onRemove={handleRemoveDiscount}
+          />
 
           <OrderItemList items={items} />
         </div>
 
-        <OrderSummary
+        <OrderSummaryCard
           items={items}
           subtotal={subtotal}
           deliveryPrice={deliveryPrice}
           totalAmount={totalAmount}
           discountAmount={discountAmount}
-          deliveryLabel="هزینه ارسال"
-          actionLabel={orderPlaced ? (needsReceipt ? "آپلود فیش و نهایی کردن" : "مشاهده سفارش") : "ثبت نهایی سفارش"}
-          onAction={orderPlaced ? (needsReceipt ? handleUploadReceipt : () => {
-            void clearCart.mutateAsync().catch(() => undefined);
-            router.push(`/orders/detail?id=${createdOrderId}`);
-          }) : handleSubmit}
+          orderPlaced={orderPlaced}
+          needsReceipt={needsReceipt}
           loading={createOrder.isPending || uploadReceipt.isPending}
           disabled={
-            !orderPlaced && (
-              !selectedAddressId ||
-              !selectedDeliveryId ||
-              !selectedPaymentId
-            )
+            !orderPlaced &&
+            (!selectedAddressId || !selectedDeliveryId || !selectedPaymentId)
           }
-          variant="checkout"
-          footer={
-            <>
-              {!orderPlaced && (
-                <Link
-                  href="/cart"
-                  className={buttonStyles({
-                    variant: "ghost",
-                    size: "sm",
-                    className: "mt-2 w-full",
-                  })}
-                >
-                  بازگشت به سبد خرید
-                </Link>
-              )}
-              {orderPlaced && needsReceipt && (
-                <div className="mt-6 space-y-2">
-                  <p className="text-xs font-bold text-stone-600 uppercase tracking-wider">
-                    بارگذاری فیش پرداخت
-                  </p>
-                  <label className="block">
-                    <Button
-                      onClick={() => receiptInputRef.current?.click()}
-                      disabled={uploadReceipt.isPending}
-                      size="sm"
-                      className="w-full"
-                    >
-                      انتخاب فیش
-                    </Button>
-                    <input
-                      ref={receiptInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleReceiptChange}
-                      className="sr-only"
-                    />
-                  </label>
-                  {receiptFile && (
-                    <p className="text-[11px] text-stone-500 mt-1">
-                      فیش انتخاب شده: {receiptFile.name}
-                    </p>
-                  )}
-                </div>
-              )}
-            </>
+          onAction={
+            orderPlaced
+              ? needsReceipt
+                ? handleUploadReceipt
+                : () => {
+                    void clearCart.mutateAsync().catch(() => undefined);
+                    router.push(`/orders/detail?id=${createdOrderId}`);
+                  }
+              : handleSubmit
           }
+          receiptFile={receiptFile}
+          onReceiptChange={handleReceiptChange}
+          onPickReceipt={() => receiptInputRef.current?.click()}
         />
       </div>
     </PageLayout>
