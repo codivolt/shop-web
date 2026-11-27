@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { AddToCartButton } from "@/components/product/add-to-cart-button";
+import { FavoriteButton } from "@/components/product/favorite-button";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { formatPrice } from "@/lib/format";
 import type { CartLineProduct } from "@/lib/types";
@@ -33,6 +34,7 @@ export function ProductPurchasePanel({ product }: { product: CartLineProduct }) 
       </div>
 
       <AddToCartButton product={product} quantity={quantity} full />
+      <FavoriteButton productId={product.id} withLabel className="w-full" />
 
       <p className="flex items-center justify-center gap-1.5 text-[11px] text-stone-500">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>

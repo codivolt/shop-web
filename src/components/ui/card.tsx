@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
 import { ProductImage } from "@/components/product/product-image";
+import { FavoriteButton } from "@/components/product/favorite-button";
 import { Badge } from "@/components/ui/badge";
 import { formatNumber, formatPrice } from "@/lib/format";
 import type { Product } from "@/lib/types";
@@ -107,6 +108,10 @@ export function ProductCardComponent({ product, variant = "default", className }
 
   return (
     <article className={cn("group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-ink-800 shadow-sm shadow-black/40 transition duration-300 hover:-translate-y-1 hover:border-brand-400/40 hover:shadow-xl hover:shadow-black/60", className)}>
+      <FavoriteButton
+        productId={product.id}
+        className="absolute left-3 top-3 z-20 bg-black/60 backdrop-blur"
+      />
       <Link href={`/products/${product.slug}`} className="relative block aspect-square overflow-hidden bg-ink-900">
         <ProductImage src={product.imageUrl} alt={product.name} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" className="transition duration-500 group-hover:scale-105" />
         <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">

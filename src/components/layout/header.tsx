@@ -75,6 +75,14 @@ export function Header() {
             ))}
             {isAuthenticated ? (
               <Link
+                href="/favorites"
+                className="hover:bg-white/10 px-3 py-2 rounded-lg font-semibold text-stone-500 hover:text-white text-sm transition"
+              >
+                علاقه‌مندی‌ها
+              </Link>
+            ) : null}
+            {isAuthenticated ? (
+              <Link
                 href="/orders"
                 className="hover:bg-white/10 px-3 py-2 rounded-lg font-semibold text-stone-500 hover:text-white text-sm transition"
               >
@@ -197,6 +205,15 @@ export function Header() {
                 </Link>
               ))}
 
+              {isAuthenticated ? (
+                <Link
+                  href="/favorites"
+                  onClick={() => setMobileOpen(false)}
+                  className="block hover:bg-white/5 px-3 py-2.5 rounded-xl font-semibold text-stone-500 hover:text-white text-sm transition"
+                >
+                  علاقه‌مندی‌ها
+                </Link>
+              ) : null}
               {isAuthenticated ? (
                 <Link
                   href="/orders"
