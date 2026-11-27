@@ -60,7 +60,7 @@ export function OrderSummary({
             <dt className="text-stone-500">جمع کالاها</dt>
             <dd className="font-bold text-stone-800">{formatPrice(subtotal)}</dd>
           </div>
-          {discountAmount && discountAmount > 0 && (
+          {discountAmount > 0 && (
             <div className="flex items-center justify-between text-emerald-300">
               <dt className="text-stone-500">تخفیف کد</dt>
               <dd className="font-semibold">-{formatPrice(discountAmount)}</dd>
