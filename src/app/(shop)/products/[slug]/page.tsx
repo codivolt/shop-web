@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ProductGrid, PageLayout, SectionCard, Badge } from "@/components/ui";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
+import { FavoriteButton } from "@/components/product/favorite-button";
 import {
   getProductAttributeValues,
   getProductBySlug,
@@ -201,6 +202,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </h1>
 
               {product.sku && <p className="mt-2 text-xs text-stone-400">کد محصول: {product.sku}</p>}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-stone-200/80 bg-stone-50/70 p-4">
+              <div>
+                <p className="text-sm font-bold text-stone-800">ذخیره در علاقه‌مندی‌ها</p>
+                <p className="mt-1 text-[11px] text-stone-500">این محصول را بعداً در صفحه علاقه‌مندی‌ها پیدا کنید.</p>
+              </div>
+              <FavoriteButton productId={product.id} withLabel />
             </div>
 
             <SectionCard title="قیمت و خرید" className="space-y-5">
